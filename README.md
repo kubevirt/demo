@@ -41,7 +41,7 @@ $ journalctl -f -u guestfs-firstboot
 
 After the deployment you can use `kubectl` to create VMs.
 
-FIXME TBD
+> FIXME TBD
 
 You can also use `virsh` to look at what is happening in libvirt
 directly:
@@ -51,4 +51,4 @@ $ yum install -y libvirt-client
 $ virsh -c qemu+tcp://127.0.0.1/system
 ```
 
-FIXME Sort out authentication
+> FIXME Sort out authentication
