@@ -51,6 +51,12 @@ EOF
   echo "# Kubernetes is ready."
 }
 
+install_cockpit() {
+  yum install -y cockpit cockpit-kubernetes
+  systemctl enable --now cockpit.socket
+  echo "# Cockpit is installed"
+}
+
 deploy_kubevirt() {
   echo "# Deploying KubeVirt"
   yum install -y git
@@ -89,5 +95,8 @@ deploy_kubevirt() {
 
 setup_kubernetes
 deploy_kubevirt
+install_cockpit
 
-touch /kubevirt-done
+touch /done
+
+#init 0
