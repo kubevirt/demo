@@ -1,5 +1,9 @@
 #!/usr/bin/bash
 
+#set -e
+
+DOCKER_TAG=${FROM_DOCKER_TAG:-latest}
+
 setup_kubernetes() {
   echo "# Setting up Kubernetes"
 
@@ -65,7 +69,7 @@ deploy_kubevirt() {
     # Fill in templates
     local MASTER_IP=$(ip route show to 0.0.0.0/0 | cut -d " " -f3)
     local DOCKER_PREFIX=kubevirt
-    local DOCKER_TAG=latest
+    local DOCKER_TAG=${DOCKER_TAG:-latest}
     for TPL in *.yaml.in; do
        # FIXME Also: Update the connection string for libvirtd
        sed -e "s/{{ master_ip }}/$MASTER_IP/g" \

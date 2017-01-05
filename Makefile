@@ -1,5 +1,7 @@
 IMAGE=demo.img
 
+
+build: FROM_DOCKER_TAG=latest
 build: $(IMAGE)
 
 $(IMAGE):
