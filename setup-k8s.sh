@@ -95,6 +95,8 @@ deploy_kubevirt() {
     done
   popd
 
+  sed -e "s/master/$(hostname)/" kubevirt/cluster/vm.json > /vm.json
+
   echo "# KubeVirt is ready."
 }
 
