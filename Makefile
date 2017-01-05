@@ -10,13 +10,13 @@ $(IMAGE):
 		--output $@ \
 		--format qcow2 \
 		--size 20G \
-		--hostname demo.kubevirt.io \
+		--hostname kubevirt-demo \
 		--upload setup-k8s.sh:/ \
 		--root-password password: \
 		--firstboot-command "bash -x /setup-k8s.sh"
 
 run: $(IMAGE)
-	qemu-kvm --machine q35 -snapshot $(IMAGE) -m 2048 -smp 4 -net nic -net user,hostfwd=:127.0.0.1:9191-:9090
+	qemu-kvm --machine q35 --cpu host --nographic -m 2048 -smp 4 -net nic -net user,hostfwd=:127.0.0.1:9191-:9090,hostfwd=:127.0.0.1:8181-:8080 $(IMAGE)
 
 clean:
 	rm -vf $(IMAGE)
