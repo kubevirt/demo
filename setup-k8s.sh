@@ -79,9 +79,10 @@ deploy_kubevirt() {
            $TPL > ${TPL%.in}
     done
 
+    MANIFEST_FILES=../images/libvirtd/libvirtd-ds.yaml *.yaml
 
     # Pre-pulling images for offline usage
-    local USED_IMAGES=$(egrep -oh "$DOCKER_PREFIX/.*:$DOCKER_TAG" *.yaml)
+    local USED_IMAGES=$(egrep -oh "$DOCKER_PREFIX/.*:$DOCKER_TAG" $MANIFEST_FILES)
     for UI in $USED_IMAGES; do
       docker pull $UI &
     done
@@ -89,7 +90,7 @@ deploy_kubevirt() {
     wait # for the pulls to complete
 
     # Deploying
-    for M in *.yaml; do
+    for M in $MANIFEST_FILES; do
       kubectl create -f $M
     done
   popd
