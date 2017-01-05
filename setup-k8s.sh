@@ -75,7 +75,7 @@ deploy_kubevirt() {
        sed -e "s/{{ master_ip }}/$MASTER_IP/g" \
            -e "s/{{ docker_prefix }}/$DOCKER_PREFIX/g" \
            -e "s/{{ docker_tag }}/$DOCKER_TAG/g" \
-           -e "s#qemu:///system#qemu+tcp://127.0.0.1/system#"  \
+           -e "s#qemu:///system#qemu+tcp://work:around@127.0.0.1/system#"  \
            $TPL > ${TPL%.in}
     done
 
