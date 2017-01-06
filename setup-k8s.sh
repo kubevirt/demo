@@ -75,27 +75,27 @@ deploy_kubevirt() {
        sed -e "s/{{ master_ip }}/$MASTER_IP/g" \
            -e "s/{{ docker_prefix }}/$DOCKER_PREFIX/g" \
            -e "s/{{ docker_tag }}/$DOCKER_TAG/g" \
-           -e "s#qemu:///system#qemu+tcp://work:around@127.0.0.1/system#"  \
+           -e "s#qemu:///system#qemu+tcp://127.0.0.1/system#"  \
            $TPL > ${TPL%.in}
     done
 
-    MANIFEST_FILES=../images/libvirtd/libvirtd-ds.yaml *.yaml
-
     # Pre-pulling images for offline usage
-    local USED_IMAGES=$(egrep -oh "$DOCKER_PREFIX/.*:$DOCKER_TAG" $MANIFEST_FILES)
+    local USED_IMAGES=$(egrep -oh "$DOCKER_PREFIX/.*:$DOCKER_TAG" *.yaml)
     for UI in $USED_IMAGES; do
       docker pull $UI &
     done
 
     wait # for the pulls to complete
-
-    # Deploying
-    for M in $MANIFEST_FILES; do
-      kubectl create -f $M
-    done
   popd
 
-  sed -e "s/master/$(hostname)/" kubevirt/cluster/vm.json > /vm.json
+  cd kubevirt
+
+  sed -e "s/master/$(hostname)/" cluster/vm.json > /vm.json
+
+  # Deploying
+  for M in manifests/*.yaml images/libvirtd/libvirtd-ds.yaml; do
+    kubectl create -f $M
+  done
 
   echo "# KubeVirt is ready."
 }
