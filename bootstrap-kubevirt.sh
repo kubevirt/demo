@@ -46,6 +46,11 @@ EOF
   # Ignore retval because it might not be dedicated
   kubectl -s 127.0.0.1:8080 taint nodes --all dedicated- || :
   
+  # Supress some messages
+  echo -e "#/bin/bash\necho 2 > /proc/sys/kernel/printk" > /etc/rc.d/rc.local
+  chmod a+x /etc/rc.d/rc.local
+  /etc/rc.d/rc.local
+
   #
   # (3/4) Add a mandatory network addon
   #
