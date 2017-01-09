@@ -28,18 +28,20 @@ $ make build
 This can take a while, as a base image and several containers are getting
 downloaded.
 
-Afterwards you can run the image:
-
-```bash
-$ make run
-```
 
 
 ## Use
 
 **Note:** Use `root` to login without a password.
 
-There are now a few things you can do _inside the VM_:
+Now that the image is completed, you can use it:
+
+```bash
+$ make run
+```
+
+This will boot you into a virtual serial console of the VM.
+First you need to login, once you are done, you can shut it down.
 
 
 ### `kubectl`
