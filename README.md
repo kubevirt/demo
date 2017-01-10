@@ -15,6 +15,7 @@ You need to install
 
 - `qemu-kvm`
 - `virt-builder`
+- `expect` (for `make check`)
 
 
 ## Build & Deploy
@@ -28,6 +29,11 @@ $ make build
 This can take a while, as a base image and several containers are getting
 downloaded.
 
+
+## Check (optional)
+
+If you want, then you can use `make check` to run a minimal integration test.
+This will create a VM and check if it's really getting created in libvirtd.
 
 
 ## Use

@@ -24,7 +24,8 @@ $(IMAGE):
 
 # run: Run the image - will finalize on first boot
 run: $(IMAGE)
-	qemu-kvm --machine q35 --cpu host \
+	qemu-system-x86_64 --machine q35 \
+		--cpu host --enable-kvm \
 		--nographic -m 2048 -smp 4 \
 		-net nic \
 		-net user,hostfwd=:127.0.0.1:9091-:9090,hostfwd=:127.0.0.1:16510-:16509 \
@@ -33,6 +34,9 @@ run: $(IMAGE)
 # run-snapshot: Run without touching the image
 run-snapshot: QEMU_APPEND=-snapshot
 run-snapshot: run
+
+check:
+	expect -f test-integration
 
 clean:
 	rm -vf $(IMAGE)
