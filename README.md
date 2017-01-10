@@ -1,33 +1,41 @@
 # KubeVirt Demo
 
-This demo will build a VM image, containing stock Kubernetes and
-will deploy KubeVirt ontop of it.
+This demo will build a VM image, containing stock [Kubernetes](https://kubernetes.io)
+and will deploy [KubeVirt](https://www.kubevirt.io) ontop of it.
 
 You can use it to start playing with KubeVirt.
 
 **Note:** It is not intended to be a development environment. You want
-to use Vagrant in that case.
+to use Vagrant (part of the KubeVirt repository) in that case.
 
 
 ## Requirements
 
-You need to install
+You need to install the follwing tools:
 
 - `qemu-kvm`
 - `virt-builder`
 - `expect` (for `make check`)
 
+On Fedora these are provided by the following packages:
 
-## Build & Deploy
+```
+$ dnf install -y qemu-system-x86 libguestfs-tools-c expect`
+```
+
+
+## Build
 
 First you need to build the image:
 
 ```bash
+$ git clone https://github.com/kubevirt/demo.git
+$ cd demo
 $ make build
 ```
 
 This can take a while, as a base image and several containers are getting
-downloaded.
+downloaded an deployed inside the image.
 
 
 ## Check (optional)

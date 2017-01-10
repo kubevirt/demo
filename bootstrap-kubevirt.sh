@@ -2,7 +2,8 @@
 
 #set -e
 
-DOCKER_TAG=${DOCKER_TAG:-latest}
+GIT_TAG=${GIT_TAG:-master}
+DOCKER_TAG=${GIT_TAG/master/latest}
 
 setup_kubernetes() {
   echo "# Setting up Kubernetes"
@@ -73,11 +74,14 @@ deploy_kubevirt() {
   echo "# Deploying KubeVirt"
   yum install -y git
   git clone https://github.com/kubevirt/kubevirt.git
-  pushd kubevirt/manifests
+  cd kubevirt
+  git checkout $GIT_TAG
+
+  pushd manifests
     # Fill in templates
     local MASTER_IP=$(nmcli --fields IP4.ADDRESS -t con show eth0 | egrep -o "([0-9]+\.){3}[0-9]+")
     local DOCKER_PREFIX=kubevirt
-    local DOCKER_TAG=${DOCKER_TAG:-latest}
+    local DOCKER_TAG=${DOCKER_TAG}
     for TPL in *.yaml.in; do
        # FIXME Also: Update the connection string for libvirtd
        sed -e "s/{{ master_ip }}/$MASTER_IP/g" \
@@ -95,8 +99,6 @@ deploy_kubevirt() {
 
     wait # for the pulls to complete
   popd
-
-  cd kubevirt
 
   sed -e "s/master/$(hostname)/" cluster/vm.json > /vm.json
 

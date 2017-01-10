@@ -1,6 +1,6 @@
 # Use docker images with this tag
 # Effectively pins the demo to a specific release
-DOCKER_TAG=v0.0.1-alpha.1
+GIT_TAG=v0.0.1-alpha.1
 
 # Disk image filename
 IMAGE=kubevirt-demo.img
@@ -20,7 +20,7 @@ $(IMAGE):
 		--hostname kubevirt-demo \
 		--upload bootstrap-kubevirt.sh:/ \
 		--root-password password: \
-		--firstboot-command "DOCKER_TAG=$(DOCKER_TAG) bash -x /bootstrap-kubevirt.sh ; $(FIRSTBOOT_APPEND)"
+		--firstboot-command "GIT_TAG=$(GIT_TAG) bash -x /bootstrap-kubevirt.sh ; $(FIRSTBOOT_APPEND)"
 
 # run: Run the image - will finalize on first boot
 run: $(IMAGE)
@@ -35,7 +35,7 @@ run: $(IMAGE)
 run-snapshot: QEMU_APPEND=-snapshot
 run-snapshot: run
 
-check:
+check: build
 	expect -f test-integration
 
 clean:
