@@ -2,7 +2,7 @@
 
 #set -e
 
-DOCKER_TAG=${FROM_DOCKER_TAG:-latest}
+DOCKER_TAG=${DOCKER_TAG:-latest}
 
 setup_kubernetes() {
   echo "# Setting up Kubernetes"
@@ -88,7 +88,7 @@ deploy_kubevirt() {
     done
 
     # Pre-pulling images for offline usage
-    local USED_IMAGES=$(egrep -oh "$DOCKER_PREFIX/.*:$DOCKER_TAG" *.yaml ../images/libvirtd/libvirtd-ds.yaml)
+    local USED_IMAGES=$(egrep -oh "$DOCKER_PREFIX/.*:($DOCKER_TAG|latest)" *.yaml ../images/libvirtd/libvirtd-ds.yaml)
     for UI in $USED_IMAGES; do
       docker pull $UI &
     done
