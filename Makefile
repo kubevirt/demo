@@ -5,13 +5,15 @@ GIT_TAG=v0.0.1-alpha.1
 # Disk image filename
 IMAGE=kubevirt-demo.img
 
+.PHONY: run
+
 # build: Build a final image
 # Append init0 - so we can boot the image to finalize the bootstrap, and then shut it down again
 build: FIRSTBOOT_APPEND=init 0
-build: $(IMAGE) run
+build: $(IMAGE)
 
 # $image: Build the image without finalization
-$(IMAGE):
+$(IMAGE): bootstrap-kubevirt.sh Makefile
 	virt-builder centos-7.3 \
 		--smp 4 --memsize 2048 \
 		--output $@ \
@@ -21,9 +23,10 @@ $(IMAGE):
 		--upload bootstrap-kubevirt.sh:/ \
 		--root-password password: \
 		--firstboot-command "GIT_TAG=$(GIT_TAG) bash -x /bootstrap-kubevirt.sh ; $(FIRSTBOOT_APPEND)"
+	$(MAKE) run
 
 # run: Run the image - will finalize on first boot
-run: $(IMAGE)
+run:
 	qemu-system-x86_64 --machine q35 \
 		--cpu host --enable-kvm \
 		--nographic -m 2048 -smp 4 \
