@@ -18,6 +18,9 @@ You need to install the follwing tools:
 - `virt-builder`
 - `expect` (for `make check`)
 
+A working `libvirtd` with hardware virtualization is required for
+these tools to operate correctly.
+
 On Fedora these are provided by the following packages:
 
 ```
@@ -52,11 +55,25 @@ This will create a VM and check if it's really getting created in libvirtd.
 Now that the image is completed, you can use it:
 
 ```bash
-$ make run
+$ ./run-demo.sh
 ```
 
 This will boot you into a virtual serial console of the VM.
 First you need to login, once you are done, you can shut it down.
+
+### Install
+
+**Note:** There is no port-forwarding setup for installed domains
+thus Cockpit can be accessed from the host.
+
+An alternative is to install as a domain into libvirtd:
+
+```bash
+$ make install
+
+$ # Now connect to the serial console using
+$ virsh console kubevirt-demo
+```
 
 
 ### `kubectl`
@@ -89,4 +106,4 @@ $ virsh list --all
 You can also view Cockpit rnuning inside the VM to look at the
 Kubernetes topology and the involved KubeVirt components.
 
-Just point yur browser to <https://127.0.0.1:9191/kubernetes>.
+Just point your browser to <https://127.0.0.1:9091/kubernetes>.

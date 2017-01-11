@@ -2,7 +2,7 @@
 
 set result_code 255
 
-spawn make run-snapshot
+spawn ./run-demo.sh
 match_max 1000000
 
 sleep 6
