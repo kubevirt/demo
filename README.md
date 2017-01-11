@@ -13,6 +13,7 @@ to use Vagrant (part of the KubeVirt repository) in that case.
 
 You need to install the follwing tools:
 
+- `make`
 - `qemu-kvm`
 - `virt-builder`
 - `expect` (for `make check`)
@@ -20,7 +21,7 @@ You need to install the follwing tools:
 On Fedora these are provided by the following packages:
 
 ```
-$ dnf install -y qemu-system-x86 libguestfs-tools-c expect`
+$ dnf install -y make qemu-system-x86 libguestfs-tools-c expect`
 ```
 
 
