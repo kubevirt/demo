@@ -21,7 +21,7 @@ You need to install the follwing tools:
 On Fedora these are provided by the following packages:
 
 ```
-$ dnf install -y make qemu-system-x86 libguestfs-tools-c expect`
+$ dnf install -y make qemu-system-x86 libguestfs-tools-c expect
 ```
 
 
