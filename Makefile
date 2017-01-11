@@ -5,41 +5,42 @@ GIT_TAG=v0.0.1-alpha.1
 # Disk image filename
 IMAGE=kubevirt-demo.img
 
-.PHONY: run
-
-# build: Build a final image
-# Append init0 - so we can boot the image to finalize the bootstrap, and then shut it down again
-build: FIRSTBOOT_APPEND=init 0
-build: $(IMAGE)
-
-# $image: Build the image without finalization
-$(IMAGE): bootstrap-kubevirt.sh Makefile
+build: data/bootstrap-kubevirt.sh Makefile
 	virt-builder centos-7.3 \
 		--smp 4 --memsize 2048 \
-		--output $@ \
+		--output $(IMAGE) \
 		--format qcow2 \
 		--size 20G \
 		--hostname kubevirt-demo \
-		--upload bootstrap-kubevirt.sh:/ \
+		--upload data/bootstrap-kubevirt.sh:/ \
 		--root-password password: \
-		--firstboot-command "GIT_TAG=$(GIT_TAG) bash -x /bootstrap-kubevirt.sh ; $(FIRSTBOOT_APPEND)"
-	$(MAKE) run
+		--firstboot-command "GIT_TAG=$(GIT_TAG) bash -x /bootstrap-kubevirt.sh ; init 0 ;"
+	@echo "Deploying KubeVirt - This can take a while (progress: tail -f build.log)"
+	@./run-demo.sh $(IMAGE) 2>&1 > build.log
+	@echo "KubeVirt got deployed successful."
 
-# run: Run the image - will finalize on first boot
-run:
-	qemu-system-x86_64 --machine q35 \
-		--cpu host --enable-kvm \
-		--nographic -m 2048 -smp 4 \
-		-net nic \
-		-net user,hostfwd=:127.0.0.1:9091-:9090,hostfwd=:127.0.0.1:16510-:16509 \
-		$(QEMU_APPEND) $(IMAGE)
+install:
+	@virsh domstate kubevirt-demo 2>/dev/null && echo "ERR: There is already a kubevirt-demo domain" || :
+	virt-install \
+		--name kubevirt-demo \
+		--memory 2048 \
+		--vcpus 4 \
+		--cpu host \
+		--import \
+		--disk $(IMAGE),format=qcow2 \
+		--network user \
+		--graphics none \
+		--noautoconsole \
+		--noreboot
+	virsh start kubevirt-demo
 
-# run-snapshot: Run without touching the image
-run-snapshot: QEMU_APPEND=-snapshot
-run-snapshot: run
+uninstall:
+	virsh destroy kubevirt-demo || :
+	virsh undefine kubevirt-demo
+		
 
-check: build
-	expect -f test-integration
+check: $(IMAGE) data/test-integration
+	QEMU_APPEND=-snapshot expect -f data/test-integration
 
 clean:
-	rm -vf $(IMAGE)
+	rm -vf $(IMAGE) build.log
