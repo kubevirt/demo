@@ -8,6 +8,8 @@ You can use it to start playing with KubeVirt.
 **Note:** It is not intended to be a development environment. You want
 to use Vagrant (part of the KubeVirt repository) in that case.
 
+[![asciicast](https://asciinema.org/a/98980.png)](https://asciinema.org/a/98980)
+
 
 ## Quickstart
 
