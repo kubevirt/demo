@@ -1,6 +1,6 @@
 # Use docker images with this tag
 # Effectively pins the demo to a specific release
-GIT_TAG=v0.0.1-alpha.1
+GIT_TAG=v0.0.1-alpha.2
 
 # Disk image filename
 IMAGE=kubevirt-demo.img
