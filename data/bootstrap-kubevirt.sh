@@ -68,6 +68,15 @@ install_cockpit_and_virsh() {
   echo -e "export VIRSH_DEFAULT_CONNECT_URI='qemu+tcp://127.0.0.1/system'" > /etc/profile.d/virsh.sh
 
   echo "# Cockpit and virsh are installed"
+
+  yum install -y cockpit-machines
+  # Ensure that libvirt is disabled on the host
+  systemctl disable --now libvirtd.service
+  pushd /usr/share/cockpit/machines
+    # Patch cockpit to point ot the container libvirtd
+    gunzip machines.js
+    sed -i "s#qemu://.*/system#qemu+tcp://127.0.0.1/system#" machines.js
+  popd
 }
 
 deploy_kubevirt() {
