@@ -14,10 +14,12 @@ build: data/bootstrap-kubevirt.sh Makefile
 		--hostname kubevirt-demo \
 		--upload data/bootstrap-kubevirt.sh:/ \
 		--root-password password: \
+                --run-command "echo -e Login as \'root\' to proceed.\\\\n >> /etc/issue" \
 		--firstboot-command "GIT_TAG=$(GIT_TAG) bash -x /bootstrap-kubevirt.sh ; init 0 ;"
-	@echo "Deploying KubeVirt - This can take a while (progress: tail -f build.log)"
+	@echo "Deploying KubeVirt inside the VM - This can take a while (progress: tail -f build.log)"
 	@./run-demo.sh $(IMAGE) 2>&1 > build.log
 	@echo "KubeVirt got deployed successful."
+	@echo "Now run: ./run-demo.sh"
 
 install:
 	@virsh domstate kubevirt-demo 2>/dev/null && echo "ERR: There is already a kubevirt-demo domain" || :
