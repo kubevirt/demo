@@ -5,6 +5,11 @@ and will deploy [KubeVirt](https://www.kubevirt.io) ontop of it.
 
 You can use it to start playing with KubeVirt.
 
+This has been tested on the following distributions:
+
+- Fedora 25
+- Ubuntu 16.04.1 LTS (Xenial Xerus) ([Setup libguestfs](http://libguestfs.org/guestfs-faq.1.html#downloading-installing-compiling-libguestfs))
+
 **Note:** It is not intended to be a development environment. You want
 to use Vagrant (part of the KubeVirt repository) in that case.
 
