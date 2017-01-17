@@ -5,6 +5,9 @@ GIT_TAG=v0.0.1-alpha.2
 # Disk image filename
 IMAGE=kubevirt-demo.img
 
+# To not depend on libvirt, use direct
+export LIBGUESTFS_BACKEND=direct
+
 build: data/bootstrap-kubevirt.sh Makefile
 	virt-builder centos-7.3 \
 		--smp 4 --memsize 2048 \
