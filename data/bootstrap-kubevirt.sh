@@ -48,7 +48,7 @@ EOF
   kubectl -s 127.0.0.1:8080 taint nodes --all dedicated- || :
   
   # Supress some messages
-  echo -e "#!/bin/bash\necho 2 > /proc/sys/kernel/printk" > /etc/rc.d/rc.local
+  echo -e "#!/bin/bash\necho 2 > /proc/sys/kernel/printk\nkubectl proxy --address=0.0.0.0 &" > /etc/rc.d/rc.local
   chmod a+x /etc/rc.d/rc.local
   /etc/rc.d/rc.local
 
@@ -57,6 +57,10 @@ EOF
   #
   # https://www.weave.works/docs/net/latest/kube-addon/
   kubectl apply -f https://git.io/weave-kube
+
+  # Add the kube dashboard
+  # https://github.com/kubernetes/dashboard
+  kubectl create -f https://rawgit.com/kubernetes/dashboard/master/src/deploy/kubernetes-dashboard.yaml
 
   echo "# Kubernetes is ready."
 }
