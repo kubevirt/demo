@@ -105,10 +105,16 @@ $ virsh list --all
 
 ### Cockpit
 
-You can also view Cockpit rnuning inside the VM to look at the
+You can also view Cockpit running inside the VM to look at the
 Kubernetes topology and the involved KubeVirt components.
 
 Just point your browser to <https://127.0.0.1:9091/kubernetes>.
+
+
+### Kubernetes Dashboard
+
+The [kubernetes dashboard](https://github.com/kubernetes/dashboard/) is also getting deployed.
+You can access it after boot on <http://127.0.0.1:8002/ui>.
 
 
 ## Check (optional)
