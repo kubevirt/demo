@@ -8,7 +8,9 @@ export PATH=$LOCALBIN:$PATH
 
 TMPD=/var/tmp/kubevirt-demo
 
+die() { echo "ERR: $@" >&2 ; exit 2 ; }
 has_bin() { which $1 2>&- ; }
+ask_to() { $@ ; }
 
 setup_minikube() {
   # From https://github.com/kubernetes/minikube/releases
@@ -53,7 +55,7 @@ _op_manifests() {
        sed -e "s/{{ master_ip }}/$MASTER_IP/g" \
            -e "s/{{ docker_prefix }}/$DOCKER_PREFIX/g" \
            -e "s/{{ docker_tag }}/$DOCKER_TAG/g" \
-           -e "s#qemu:///system#qemu+tcp://$MASTER_IP/system#"  \
+           -e "s#qemu+tcp://minikube.libvirtd.default.svc.cluster.local/system"#"  \
            $TPL > ${TPL%.in}
     done
   popd
@@ -69,7 +71,18 @@ _op_manifests() {
   echo "# KubeVirt is ready."
 }
 
-has_bin minikube || setup_minikube
-${1:-deploy}_kubevirt
+main() {
+  has_bin minikube || ask_to setup_minikube
+  has_bin minikube || die "Please install minikube"
+  minikube start || :
+  minikube status || die "Please start minikube"
+
+  case $1 in
+    undeploy) undeploy_kubevirt ;;
+    deploy|*) deploy_kubevirt ;;
+  esac
+}
+
+main
 
 # vim: et ts=2
