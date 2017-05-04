@@ -9,8 +9,9 @@ export PATH=$LOCALBIN:$PATH
 TMPD=/var/tmp/kubevirt-demo
 
 die() { echo "ERR: $@" >&2 ; exit 2 ; }
-has_bin() { which $1 2>&- ; }
-ask_to() { $@ ; }
+silent() { "$@" > /dev/null 2>&1 ; }
+has_bin() { silent which $1 ; }
+ask_to() { "$@" ; }
 
 setup_minikube() {
   # From https://github.com/kubernetes/minikube/releases
@@ -52,21 +53,25 @@ _op_manifests() {
     local DOCKER_TAG=${DOCKER_TAG}
     for TPL in *.yaml.in; do
        # FIXME Also: Update the connection string for libvirtd
+       echo $TPL
        sed -e "s/{{ master_ip }}/$MASTER_IP/g" \
            -e "s/{{ docker_prefix }}/$DOCKER_PREFIX/g" \
            -e "s/{{ docker_tag }}/$DOCKER_TAG/g" \
-           -e "s#qemu+tcp://minikube.libvirtd.default.svc.cluster.local/system"#"  \
+           -e "s#qemu.*/system#qemu+tcp://minikube.libvirtd.default.svc.cluster.local/system#"  \
+           -e "s#kubernetes.io/hostname:.*#kubernetes.io/hostname: minikube#" \
            $TPL > ${TPL%.in}
     done
   popd
 
   # Deploying
-  for M in manifests/*.yaml images/libvirtd/libvirtd-ds.yaml; do
+  for M in manifests/*.yaml; do
     echo $M
     kubectl $OP -f $M
   done
 
-  sed -e "s/master/$(hostname)/" cluster/vm.json | kubectl $OP -f -
+  sleep 2
+
+  kubectl $OP -f cluster/vm.json
 
   echo "# KubeVirt is ready."
 }
@@ -74,8 +79,7 @@ _op_manifests() {
 main() {
   has_bin minikube || ask_to setup_minikube
   has_bin minikube || die "Please install minikube"
-  minikube start || :
-  minikube status || die "Please start minikube"
+  silent minikube status || die "Please start minikube"
 
   case $1 in
     undeploy) undeploy_kubevirt ;;
@@ -83,6 +87,6 @@ main() {
   esac
 }
 
-main
+main $@
 
 # vim: et ts=2
