@@ -12,6 +12,7 @@ die() { echo "ERR: $@" >&2 ; exit 2 ; }
 silent() { "$@" > /dev/null 2>&1 ; }
 has_bin() { silent which $1 ; }
 ask_to() { "$@" ; }
+say_and_run() { echo "$1" ; shift 1 ; "$@" ; }
 
 setup_minikube() {
   # From https://github.com/kubernetes/minikube/releases
@@ -69,7 +70,9 @@ _op_manifests() {
     kubectl $OP -f $M
   done
 
-  sleep 2
+  while ! kubectl api-versions | grep -q kubevirt.io/v1alpha1 ; do
+    sleep 2
+  done
 
   kubectl $OP -f cluster/vm.json
 
@@ -79,7 +82,8 @@ _op_manifests() {
 main() {
   has_bin minikube || ask_to setup_minikube
   has_bin minikube || die "Please install minikube"
-  silent minikube status || die "Please start minikube"
+  #silent 'kubectl config get-contexts | egrep "\*.*minikube"' || say_and_run "Starting minikube" minikube start
+  #die "Please start minikube"
 
   case $1 in
     undeploy) undeploy_kubevirt ;;
