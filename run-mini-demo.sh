@@ -58,7 +58,7 @@ _op_manifests() {
        sed -e "s/{{ master_ip }}/$MASTER_IP/g" \
            -e "s/{{ docker_prefix }}/$DOCKER_PREFIX/g" \
            -e "s/{{ docker_tag }}/$DOCKER_TAG/g" \
-           -e "s#qemu.*/system#qemu+tcp://minikube.libvirtd.default.svc.cluster.local/system#"  \
+           -e "s#qemu.*/system#qemu+tcp://minikube/system#"  \
            -e "s#kubernetes.io/hostname:.*#kubernetes.io/hostname: minikube#" \
            $TPL > ${TPL%.in}
     done
