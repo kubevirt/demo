@@ -32,6 +32,13 @@ deploy_kubevirt() {
   pushd $TMPD
   [[ -d kubevirt ]] || git clone https://github.com/kubevirt/kubevirt.git
   _op_manifests
+  while kubectl get pods | grep -q ContainerCreating;
+  do
+    echo "Waiting for KubeVirt to be ready ..."
+    sleep 3
+  done
+  echo "# KubeVirt is now ready. Try:"
+  echo "$ kubectl get vms"
 }
 
 undeploy_kubevirt() {
@@ -52,12 +59,14 @@ _op_manifests() {
     local MASTER_IP=$(minikube ip)
     local DOCKER_PREFIX=kubevirt
     local DOCKER_TAG=${DOCKER_TAG}
+    local PRIMARY_NIC=eth0
     for TPL in *.yaml.in; do
        # FIXME Also: Update the connection string for libvirtd
        echo $TPL
        sed -e "s/{{ master_ip }}/$MASTER_IP/g" \
            -e "s/{{ docker_prefix }}/$DOCKER_PREFIX/g" \
            -e "s/{{ docker_tag }}/$DOCKER_TAG/g" \
+           -e "s/{{ primary_nic }}/$PRIMARY_NIC/g" \
            -e "s#qemu.*/system#qemu+tcp://minikube/system#"  \
            -e "s#kubernetes.io/hostname:.*#kubernetes.io/hostname: minikube#" \
            $TPL > ${TPL%.in}
@@ -66,17 +75,19 @@ _op_manifests() {
 
   # Deploying
   for M in manifests/*.yaml; do
+    # FIXME Drop the cockpit demo
+    grep -qi cockpit $M && continue
     echo $M
     kubectl $OP -f $M
   done
 
+  test $OP == "create" && \
   while ! kubectl api-versions | grep -q kubevirt.io/v1alpha1 ; do
     sleep 2
   done
 
-  kubectl $OP -f cluster/vm.json
-
-  echo "# KubeVirt is ready."
+  # FIXME See https://github.com/kubernetes/minikube/issues/1845
+  jq "del(.spec.domain.devices.interfaces)" cluster/vm.json | kubectl $OP -f -
 }
 
 main() {
