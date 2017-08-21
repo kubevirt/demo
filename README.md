@@ -13,6 +13,10 @@ This has been tested on the following distributions:
 
 ## Quickstart
 
+> Please be aware: The initial deployment to a new minikube instance can take
+> a logn time, because a number of containers has to be pulled from the
+> internet.
+
 1. Install minikube as described here: https://github.com/kubernetes/minikube/
 
 2. Deploy KubeVirt on it
@@ -21,7 +25,11 @@ This has been tested on the following distributions:
 git clone https://github.com/kubevirt/demo.git
 cd demo
 ./run-demo.sh
+```
 
+Congratulations, KubeVirt should now 
+
+```bash
 # After deployment you can manage VMs using the usual verbs:
 kubectl get vms
 ```
