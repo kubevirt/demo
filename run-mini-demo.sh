@@ -95,7 +95,7 @@ _op_manifests() {
     silent kubectl $OP -f $M
   done
 
-  kubectl $OP -f cluster/vm.json
+  [[ "$OP" != "delete" ]] && kubectl $OP -f cluster/vm.json
 }
 
 

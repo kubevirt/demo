@@ -1,144 +1,78 @@
 # KubeVirt Demo
 
-This demo will build a VM image, containing stock [Kubernetes](https://kubernetes.io)
-and will deploy [KubeVirt](https://www.kubevirt.io) ontop of it.
+This demo can be used to deploy [KubeVirt](https://www.kubevirt.io) on
+[minikube](https://github.com/kubernetes/minikube/).
 
 You can use it to start playing with KubeVirt.
 
 This has been tested on the following distributions:
 
-- Fedora 25
-- Ubuntu 16.04.1 LTS (Xenial Xerus) ([Setup libguestfs](http://libguestfs.org/guestfs-faq.1.html#downloading-installing-compiling-libguestfs))
-
-**Note:** It is not intended to be a development environment. You want
-to use Vagrant (part of the KubeVirt repository) in that case.
-
-[![asciicast](https://asciinema.org/a/98980.png)](https://asciinema.org/a/98980)
+- Fedora 25 (minikube kvm driver)
+- Ubuntu 16.04.1 LTS (Xenial Xerus)
 
 
 ## Quickstart
 
-Make sure the dependencies are installed, then:
+> Please be aware: The initial deployment to a new minikube instance can take
+> a logn time, because a number of containers has to be pulled from the
+> internet.
+
+1. Install minikube as described here: https://github.com/kubernetes/minikube/
+
+2. Deploy KubeVirt on it
 
 ```bash
 git clone https://github.com/kubevirt/demo.git
 cd demo
-make build
 ./run-demo.sh
+```
 
-# Inside of the now booting VM
-# Login as root (no password)
-kubectl create -f /vm.json
+Congratulations, KubeVirt should be working now. You can now start to manage
+VMs:
+
+```bash
+# After deployment you can manage VMs using the usual verbs:
 kubectl get vms
-virsh list --all
+kubectl delete vms testvm
+kubectl create -f $YOUR_VM_SPEC
 ```
 
+### Accessing VMs
 
-## Requirements
-
-You need to install the follwing tools:
-
-- `make`
-- `qemu-kvm`
-- `virt-builder`
-- `expect` (for `make check`)
-
-A working `libvirtd` with hardware virtualization is required for
-these tools to operate correctly.
-
-On Fedora these are provided by the following packages:
-
-```
-$ dnf install -y make qemu-system-x86 libguestfs-tools-c expect
-```
-
-
-## Build
-
-First you need to build the image:
+Currently you need a separate tool to access the graphical display or serial
+console of a VM, you can retrieve it using:
 
 ```bash
-$ git clone https://github.com/kubevirt/demo.git
-$ cd demo
-$ make build
+curl -LO https://github.com/kubevirt/kubevirt/releases/download/v0.0.1-alpha.6/virtctl
+chmod a+x virtctl
 ```
 
-This can take a while, as a base image and several containers are getting
-downloaded an deployed inside the image.
-
-
-## Use
-
-**Note:** Use `root` to login without a password.
-
-Now that the image is completed, you can use it:
+Now you can connect to a serial or SPICE console:
 
 ```bash
-$ ./run-demo.sh
+# For a serial console (if present in VM)
+./virtctl console testvm
+
+# For a SPICE connectionwith remote-viewer (if SPICE is configured for VM)
+./virtctl spice testvm
+
+# ... or for just the connection details
+./virtctl spice --details testvm
 ```
 
-This will boot you into a virtual serial console of the VM.
-First you need to login, once you are done, you can shut it down.
+### Removal
 
-### `kubectl`
-
-After the deployment you can use `kubectl` to create VMs:
+To remove all traces of Kubevirt, you can undeploy it using:
 
 ```bash
-$ kubectl create -f /vm.json
+./run-demo.sh undeploy
 ```
 
-To view created VMs use the following command:
+## Kubernetes Dashboard
+
+The dashboard is provided as a minikube add-on. To enable it run:
 
 ```bash
-$ kubectl get vms
+minikube addon enable dashboard
 ```
-
-### `virsh`
-
-You can also use `virsh` inside the VM to look at what is
-happening in libvirt directly:
-
-```bash
-$ virsh list --all
-```
-
-### Cockpit
-
-You can also view Cockpit running inside the VM to look at the
-Kubernetes topology and the involved KubeVirt components.
-
-Just point your browser to <https://127.0.0.1:9091/kubernetes>.
-
-
-### Kubernetes Dashboard
-
-The [kubernetes dashboard](https://github.com/kubernetes/dashboard/) is also getting deployed.
-You can access it after boot on <http://127.0.0.1:8002/ui>.
-
-
-## Check (optional)
-
-If you want, then you can use `make check` to run a minimal integration test.
-This will create a VM and check if it's really getting created in libvirtd.
-
-```bash
-$ make check
-```
-
-
-## Install
-
-**Note:** There is no port-forwarding setup for installed domains
-thus Cockpit can be accessed from the host.
-
-An alternative is to install as a domain into libvirtd:
-
-```bash
-$ make install
-
-$ # Now connect to the serial console using
-$ virsh console kubevirt-demo
-```
-
 
