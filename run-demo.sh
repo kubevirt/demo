@@ -1,9 +1,6 @@
 #!/bin/bash
 
-LOCALBIN=$HOME/.local/bin
-export PATH=$LOCALBIN:$PATH
-
-TMPD=/var/tmp/kubevirt-demo
+export GIT_TAG="v0.0.1-alpha.6"
 
 bold() { echo -e "\e[1m$@\e[0m" ; }
 red() { echo -e "\e[31m$@\e[0m" ; }
@@ -19,6 +16,12 @@ ok() { green "${@:-OK}" ; }
 
 pushd() { command pushd "$@" >/dev/null ; }
 popd() { command popd "$@" >/dev/null ; }
+
+LOCALBIN=$HOME/.local/bin
+export PATH=$LOCALBIN:$PATH
+
+TMPD=/var/tmp/kubevirt-demo
+
 
 check_for_minikube() {
   parn "Checking for minikube"
@@ -100,7 +103,7 @@ _op_manifests() {
 
 
 main() {
-  title "KubeVirt on minikube demo"
+  title "KubeVirt (${GIT_TAG}) demo on minikube"
 
   check_for_minikube
 
