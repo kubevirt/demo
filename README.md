@@ -13,7 +13,9 @@ This has been tested on the following distributions:
 
 ## Quickstart
 
-If you have minikube insalled already, then you just need to deploy the demo:
+1. Install minikube as described here: https://github.com/kubernetes/minikube/
+
+2. Deploy KubeVirt on it
 
 ```bash
 git clone https://github.com/kubevirt/demo.git
