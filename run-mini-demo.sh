@@ -1,58 +1,77 @@
 #!/bin/bash
 
-# Can be latest
-MINIKUBE_TAG=v0.16.0
-
 LOCALBIN=$HOME/.local/bin
 export PATH=$LOCALBIN:$PATH
 
 TMPD=/var/tmp/kubevirt-demo
 
-die() { echo "ERR: $@" >&2 ; exit 2 ; }
+bold() { echo -e "\e[1m$@\e[0m" ; }
+red() { echo -e "\e[31m$@\e[0m" ; }
+green() { echo -e "\e[32m$@\e[0m" ; }
+
+die() { red "ERR: $@" >&2 ; exit 2 ; }
 silent() { "$@" > /dev/null 2>&1 ; }
 has_bin() { silent which $1 ; }
-ask_to() { "$@" ; }
-say_and_run() { echo "$1" ; shift 1 ; "$@" ; }
+title() { bold "$@" ; }
+par() { echo -e "- $@" ; }
+parn() { echo -en "- $@ ... " ; }
+ok() { green "${@:-OK}" ; }
 
-setup_minikube() {
-  # From https://github.com/kubernetes/minikube/releases
-  has_bin docker-machine-driver-kvm || err "Please install the docker kvm driver: https://github.com/kubernetes/minikube/blob/master/DRIVERS.md#kvm-driver"
+pushd() { command pushd "$@" >/dev/null ; }
+popd() { command popd "$@" >/dev/null ; }
 
-  echo "Setting up minikube"
-  mkdir -p $LOCALBIN
-  curl -Lo minikube https://storage.googleapis.com/minikube/releases/${MINIKUBE_TAG}/minikube-linux-amd64
-  chmod +x minikube
-  mv minikube ${LOCALBIN}/minikube
+check_for_minikube() {
+  parn "Checking for minikube"
+  has_bin minikube || \
+    die "minikube not found. Please install minikube, see
+https://github.com/kubernetes/minikube for details."
+  ( minikube status | grep -qsi stopped ) && \
+    die "minikube is installed but not started. Please start minikube."
+  ok
 }
 
 deploy_kubevirt() {
-  local OP=create
-  echo "# Deploying KubeVirt"
-  mkdir -p $TMPD
-  pushd $TMPD
-  [[ -d kubevirt ]] || git clone https://github.com/kubevirt/kubevirt.git
-  _op_manifests
-  while kubectl get pods | grep -q ContainerCreating;
-  do
-    echo "Waiting for KubeVirt to be ready ..."
-    sleep 3
-  done
-  echo "# KubeVirt is now ready. Try:"
-  echo "$ kubectl get vms"
+  parn "Checking out KubeVirt"
+  {
+    mkdir -p $TMPD
+    pushd $TMPD
+    [[ -d kubevirt ]] || git clone https://github.com/kubevirt/kubevirt.git
+  }
+  ok
+  par "Deploying manifests - this can take several minutes!"
+  {
+    _op_manifests create
+    par "Waiting for the cluster to be ready ..."
+    kubectl get pods -w | while read LINE 
+    do
+      echo -n "  Cluster changed, checking if KubeVirt is ready ... "
+      if ! kubectl get pods | grep -qs ContainerCreating; then
+        ok "Yes!"
+        ok "KubeVirt is now ready. Try:"
+        echo "$ kubectl get vms"
+        kill $(pidof -- kubectl get pods -w)
+        break
+      fi
+      echo "Not yet."
+    done
+  }
 }
 
 undeploy_kubevirt() {
-  local OP=delete
-  _op_manifests
+  parn "Removing KubeVirt from minikube"
+  _op_manifests delete
+  ok
 }
 
 _op_manifests() {
+  local OP=$1
   local GIT_TAG=${GIT_TAG:-master}
   local DOCKER_TAG=${GIT_TAG/master/latest}
 
   cd $TMPD/kubevirt
-  git pull
-  git reset --hard $GIT_TAG
+  silent git pull
+  silent git reset --hard $GIT_TAG
+  silent git clean -fdx
 
   pushd manifests
     # Fill in templates
@@ -61,8 +80,6 @@ _op_manifests() {
     local DOCKER_TAG=${DOCKER_TAG}
     local PRIMARY_NIC=eth0
     for TPL in *.yaml.in; do
-       # FIXME Also: Update the connection string for libvirtd
-       echo $TPL
        sed -e "s/{{ master_ip }}/$MASTER_IP/g" \
            -e "s/{{ docker_prefix }}/$DOCKER_PREFIX/g" \
            -e "s/{{ docker_tag }}/$DOCKER_TAG/g" \
@@ -75,26 +92,17 @@ _op_manifests() {
 
   # Deploying
   for M in manifests/*.yaml; do
-    # FIXME Drop the cockpit demo
-    grep -qi cockpit $M && continue
-    echo $M
-    kubectl $OP -f $M
+    silent kubectl $OP -f $M
   done
 
-  test $OP == "create" && \
-  while ! kubectl api-versions | grep -q kubevirt.io/v1alpha1 ; do
-    sleep 2
-  done
-
-  # FIXME See https://github.com/kubernetes/minikube/issues/1845
-  jq "del(.spec.domain.devices.interfaces)" cluster/vm.json | kubectl $OP -f -
+  kubectl $OP -f cluster/vm.json
 }
 
+
 main() {
-  has_bin minikube || ask_to setup_minikube
-  has_bin minikube || die "Please install minikube"
-  #silent 'kubectl config get-contexts | egrep "\*.*minikube"' || say_and_run "Starting minikube" minikube start
-  #die "Please start minikube"
+  title "KubeVirt on minikube demo"
+
+  check_for_minikube
 
   case $1 in
     undeploy) undeploy_kubevirt ;;
