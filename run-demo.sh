@@ -22,6 +22,13 @@ export PATH=$LOCALBIN:$PATH
 
 TMPD=/var/tmp/kubevirt-demo
 
+check_kubectl() {
+  parn "Checking kubectl version"
+  local CTLVER=$(kubectl version --short --client)
+  egrep -q "1.[78]" <<< $CTLVER || \
+    die "kubectl needs to be 1.7 or higher: $CTLVER"
+  ok
+}
 
 check_for_minikube() {
   parn "Checking for minikube"
@@ -43,7 +50,7 @@ deploy_kubevirt() {
   ok
   par "Deploying manifests - this can take several minutes!"
   {
-    _op_manifests create
+    _op_manifests apply
     par "Waiting for the cluster to be ready ..."
     kubectl get pods -w | while read LINE 
     do
@@ -105,6 +112,7 @@ _op_manifests() {
 main() {
   title "KubeVirt (${GIT_TAG}) demo on minikube"
 
+  check_kubectl
   check_for_minikube
 
   case $1 in
