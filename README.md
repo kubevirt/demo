@@ -43,8 +43,15 @@ $ cd demo
 $ ./run-demo.sh
 ```
 
-Congratulations, KubeVirt should be working now. You can now start to manage
-VMs:
+Congratulations, KubeVirt should be working now. To verify it run:
+
+```bash
+./test.sh
+VM is running ... OK
+PASS
+```
+
+If it passes, then you can now start to manage VMs:
 
 ```bash
 # After deployment you can manage VMs using the usual verbs:
@@ -91,4 +98,3 @@ The dashboard is provided as a minikube add-on. To enable it run:
 ```bash
 $ minikube addon enable dashboard
 ```
-
