@@ -56,11 +56,13 @@ If it passes, then you can now start to manage VMs:
 ```bash
 # After deployment you can manage VMs using the usual verbs:
 $ kubectl get vms
-$ kubectl delete vms testvm
-$ kubectl create -f $YOUR_VM_SPEC
+$ kubectl get vms -o json
+
+# To delete: kubectl delete vms testvm
+# To create your own: kubectl create -f $YOUR_VM_SPEC
 ```
 
-### Accessing VMs
+### Accessing VMs (serial console & spice)
 
 Currently you need a separate tool to access the graphical display or serial
 console of a VM, you can retrieve it using:
@@ -68,19 +70,12 @@ console of a VM, you can retrieve it using:
 ```bash
 $ curl -LO https://github.com/kubevirt/kubevirt/releases/download/v0.0.1-alpha.6/virtctl
 $ chmod a+x virtctl
-```
 
-Now you can connect to a serial or SPICE console:
+# Connect to the serial console
+$ ./virtctl console -s http://$(minikube ip):8184 testvm -d serial0
 
-```bash
-# For a serial console (if present in VM)
-$ ./virtctl console testvm
-
-# For a SPICE connectionwith remote-viewer (if SPICE is configured for VM)
-$ ./virtctl spice testvm
-
-# ... or for just the connection details
-$ ./virtctl spice --details testvm
+# Connect to the graphical display
+$ ./virtctl spice -s http://$(minikube ip):8184 testvm
 ```
 
 ### Removal
