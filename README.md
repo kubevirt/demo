@@ -65,17 +65,24 @@ $ kubectl get vms -o json
 ### Accessing VMs (serial console & spice)
 
 Currently you need a separate tool to access the graphical display or serial
-console of a VM, you can retrieve it using:
+console of a VM, you can install it as a `kubelet` plugin using:
 
 ```bash
-$ curl -LO https://github.com/kubevirt/kubevirt/releases/download/v0.0.1-alpha.6/virtctl
-$ chmod a+x virtctl
+$ ./run-demo.sh plug
+KubeVirt (v0.0.1-alpha.6) demo on minikube
+- Checking kubectl version ... OK
+- Fetching and registering virtctl ... OK
+$ 
+```
 
+Afterwards you can use it as follows:
+
+```bash
 # Connect to the serial console
-$ ./virtctl console -s http://$(minikube ip):8184 testvm -d serial0
+$ kubectl plugin virt console -s http://$(minikube ip):8184 testvm -d serial0
 
 # Connect to the graphical display
-$ ./virtctl spice -s http://$(minikube ip):8184 testvm
+$ kubectl plugin virt spice -s http://$(minikube ip):8184 testvm
 ```
 
 ### Removal
@@ -84,6 +91,7 @@ To remove all traces of Kubevirt, you can undeploy it using:
 
 ```bash
 $ ./run-demo.sh undeploy
+$ ./run-demo.sh unplug
 ```
 
 ## Kubernetes Dashboard
