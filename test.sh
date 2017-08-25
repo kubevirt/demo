@@ -11,6 +11,7 @@ check() { echo -n "$1 ... "; eval "$2" && ok || fail ; }
 
 
 check_readme_version() {
+  bash -n run-demo.sh || die "demo has syntax errors"
   eval "$(grep "export GIT_TAG" run-demo.sh)"
   grep -q $GIT_TAG README.md
 }
@@ -22,7 +23,6 @@ check_websocket() {
 }
 
 
-check "run-demo.sh has correct syntax" "bash -n run-demo.sh"
 check "README contains correct version" "check_readme_version"
 check "VM is running" "( kubectl get -o json vms testvm | jq .status.phase ) | grep -q Running"
 check "VM serial console works" "check_websocket"

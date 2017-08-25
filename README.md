@@ -41,10 +41,28 @@ $ minikube start --vm-driver kvm --network-plugin cni
 $ git clone https://github.com/kubevirt/demo.git
 $ cd demo
 $ ./run-demo.sh
+$ ./run-demo.sh 
+KubeVirt (v0.0.1-alpha.6) demo on minikube
+- Checking kubectl version ... OK
+- Checking for minikube ... OK
+- Checking out KubeVirt ... OK
+- Deploying manifests - this can take several minutes!
+vm "testvm" created
+- Waiting for the cluster to be ready ...
+  Cluster changed, checking if KubeVirt is ready ... Not yet.
+...
+  Cluster changed, checking if KubeVirt is ready ... Yes!
+KubeVirt is now ready.
+Optional, register the virt plugin for VM access:
+  ./run-demo.sh plug
+Try: $ kubectl get vms
 
 # Run a script to verify that it operates correctly
 $ ./test.sh
+$ ./test.sh 
+README contains correct version ... OK
 VM is running ... OK
+VM serial console works ... OK
 PASS
 ```
 
@@ -73,10 +91,10 @@ KubeVirt (v0.0.1-alpha.6) demo on minikube
 # Now the plugin is ready to use
 
 # Connect to the serial console
-$ kubectl plugin virt console -s http://$(minikube ip):8184 testvm -d serial0
+$ kubectl plugin virt -- console -s http://$(minikube ip):8184 testvm
 
 # Connect to the graphical display
-$ kubectl plugin virt spice -s http://$(minikube ip):8184 testvm
+$ kubectl plugin virt -- spice -s http://$(minikube ip):8184 testvm
 ```
 
 ### Removal
