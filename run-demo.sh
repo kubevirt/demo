@@ -113,23 +113,30 @@ _op_manifests() {
 
 
 setup_kubectl_plugin() {
-  local VIRTCTL="$PLUGIN_PATH/virtctl"
+  local OSARCH=$(kubectl version --client --output yaml | egrep -o "linux/.*")
+  local VIRTCTL="virtctl-$GIT_TAG-${OSARCH/\//-}"
+
   parn "Fetching and registering virtctl"
   mkdir -p "$PLUGIN_PATH" || die "Failed to create plugin path"
-  if [[ ! -f "$VIRTCTL" ]]; then
-    curl -# -o "$VIRTCTL" \
-       -L "https://github.com/kubevirt/kubevirt/releases/download/$GIT_TAG/virtctl" || \
+
+  if [[ ! -f "$PLUGIN_PATH/$VIRTCTL" ]]; then
+    local DOWNLOADURL="https://github.com/kubevirt/kubevirt/releases/download/"
+    ( curl --fail -C - -# -o "$PLUGIN_PATH/$VIRTCTL" \
+           -L "$DOWNLOADURL/$GIT_TAG/$VIRTCTL" || \
+      curl --fail -C - -# -o "$PLUGIN_PATH/$VIRTCTL" \
+           -L "$DOWNLOADURL/$GIT_TAG/virtctl" ) || \
       die "Failed to fetch plugin"
-    chmod a+x "$VIRTCTL" || die "Failed to make plugin executable"
+    chmod a+x "$PLUGIN_PATH/$VIRTCTL" || die "Failed to make plugin executable"
   fi
 
 cat > "$PLUGIN_PATH/plugin.yaml" <<EOF
 name: "virt"
-shortDesc: "Provides virtualization related commands"
-command: "$VIRTCTL"
+shortDesc: "Provides virtualization related commands ($VIRTCTL)"
+command: "$PLUGIN_PATH/$VIRTCTL"
 EOF
 
   ( kubectl plugin 2>&1 | grep -q virt ) || die "Registration failed"
+  ( kubectl plugin virt 2>&1 | grep -q console ) || die "Execution failed"
   ok
 }
 
