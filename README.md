@@ -3,6 +3,8 @@
 This demo will deploy [KubeVirt](https://www.kubevirt.io) on an existing
 [minikube](https://github.com/kubernetes/minikube/).
 
+[![asciicast](https://asciinema.org/a/134953.png)](https://asciinema.org/a/134953)
+
 This has been tested on the following distributions:
 
 - Fedora 25 (minikube [kvm
