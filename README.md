@@ -113,4 +113,3 @@ To remove all traces of Kubevirt, you can undeploy it using:
 $ ./run-demo.sh undeploy
 $ ./run-demo.sh unplug
 ```
-```
