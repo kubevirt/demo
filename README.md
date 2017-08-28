@@ -43,7 +43,11 @@ $ minikube start \
   --iso-url https://storage.googleapis.com/minikube-builds/1846/minikube-testing.iso
 ```
 
-3. Deploy KubeVirt on it
+3. Install via a package manager or
+  [download](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-curl)
+  `kubectl`
+
+4. Deploy KubeVirt on it
 
 ```bash
 $ git clone https://github.com/kubevirt/demo.git
