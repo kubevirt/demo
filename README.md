@@ -30,11 +30,17 @@ This has been tested on the following distributions:
 1. If not installed, install minikube as described here:
    https://github.com/kubernetes/minikube/
 
+   1. Install the [driver](https://github.com/kubernetes/minikube/blob/master/docs/drivers.md)
+   2. Download the [`minikube` binary](https://github.com/kubernetes/minikube/releases)
+
 2. Launch minikube with CNI:
 
-
 ```bash
-$ minikube start --vm-driver kvm --network-plugin cni
+# See the note above on the --iso-url parameter
+$ minikube start \
+  --vm-driver kvm \
+  --network-plugin cni \
+  --iso-url https://storage.googleapis.com/minikube-builds/1846/minikube-testing.iso
 ```
 
 3. Deploy KubeVirt on it
