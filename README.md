@@ -17,16 +17,6 @@ This has been tested on the following distributions:
 > a long time, because a number of containers have to be pulled from the
 > internet.
 
-> **Note:** Due to [this
-> issue](https://github.com/kubernetes/minikube/issues/1845), currently a
-> pre-release minikube iso is required. Use the following snippet to launch
-> minikube using the custom iso:
-> ```bash
-> $ minikube start --vm-driver kvm --network-plugin cni \
->   --iso-url https://storage.googleapis.com/minikube-builds/1846/minikube-testing.iso
-> ```
-
-
 1. If not installed, install minikube as described here:
    https://github.com/kubernetes/minikube/
 
@@ -36,11 +26,9 @@ This has been tested on the following distributions:
 2. Launch minikube with CNI:
 
 ```bash
-# See the note above on the --iso-url parameter
 $ minikube start \
   --vm-driver kvm \
-  --network-plugin cni \
-  --iso-url https://storage.googleapis.com/minikube-builds/1846/minikube-testing.iso
+  --network-plugin cni
 ```
 
 3. Install via a package manager or
@@ -69,7 +57,7 @@ Optional, register the virt plugin for VM access:
 Try: $ kubectl get vms
 
 # Run a script to verify that it operates correctly
-$ ./test.sh
+$ ./test.sh 
 README contains correct version ... OK
 VM is running ... OK
 VM serial console works ... OK
