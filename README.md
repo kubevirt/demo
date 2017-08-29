@@ -53,7 +53,6 @@ $ minikube start \
 $ git clone https://github.com/kubevirt/demo.git
 $ cd demo
 $ ./run-demo.sh
-$ ./run-demo.sh 
 KubeVirt (v0.0.1-alpha.6) demo on minikube
 - Checking kubectl version ... OK
 - Checking for minikube ... OK
@@ -71,7 +70,6 @@ Try: $ kubectl get vms
 
 # Run a script to verify that it operates correctly
 $ ./test.sh
-$ ./test.sh 
 README contains correct version ... OK
 VM is running ... OK
 VM serial console works ... OK
