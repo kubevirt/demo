@@ -53,7 +53,7 @@ $ minikube start \
 $ git clone https://github.com/kubevirt/demo.git
 $ cd demo
 $ ./run-demo.sh
-KubeVirt (v0.0.1-alpha.6) demo on minikube
+KubeVirt (v0.0.2) demo on minikube
 - Checking kubectl version ... OK
 - Checking for minikube ... OK
 - Checking out KubeVirt ... OK
