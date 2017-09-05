@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export GIT_TAG="v0.0.1-alpha.6"
+export GIT_TAG="v0.0.2"
 
 bold() { echo -e "\e[1m$@\e[0m" ; }
 red() { echo -e "\e[31m$@\e[0m" ; }
