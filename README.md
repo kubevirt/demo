@@ -78,21 +78,21 @@ $ kubectl get vms -o json
 ### Accessing VMs (serial console & spice)
 
 Currently you need a separate tool to access the graphical display or serial
-console of a VM, you can install it as a `kubelet` plugin using:
+console of a VM:
 
 ```bash
-$ ./run-demo.sh plug
-KubeVirt (v0.0.1-alpha.6) demo on minikube
-- Checking kubectl version ... OK
-- Fetching and registering virtctl ... OK
+# Get virtctl
+
+$ curl -L -o virtctl https://github.com/kubevirt/kubevirt/releases/download/v0.0.2/virtctl-v0.0.2-linux-amd64
+$ chmod a+x virtctl
 
 # Now the plugin is ready to use
 
 # Connect to the serial console
-$ kubectl plugin virt -- console -s http://$(minikube ip):8184 testvm
+$ ./virtctl console -s http://$(minikube ip):8184 testvm
 
 # Connect to the graphical display
-$ kubectl plugin virt -- spice -s http://$(minikube ip):8184 testvm
+$ ./virtctl spice -s http://$(minikube ip):8184 testvm
 ```
 
 ### Removal
