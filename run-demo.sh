@@ -32,12 +32,13 @@ check_kubectl() {
 }
 
 check_for_minikube() {
-  parn "Checking for minikube"
-  has_bin minikube || \
-    die "minikube not found. Please install minikube, see
+  parn "Checking for minikube/minishift"
+  (has_bin minikube; has_bin minishift) || \
+    die "Neither minikube nor minishift found. Please install minikube, see
 https://github.com/kubernetes/minikube for details."
   ( minikube status | grep -qsi stopped ) && \
-    die "minikube is installed but not started. Please start minikube."
+  ( minishift status | grep -qsu stopped ) && \
+    die "minikube/minishift is installed but not started. Please start minikube or minishift."
   ok
 }
 
