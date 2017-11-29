@@ -24,7 +24,7 @@ check_websocket() {
 
 
 check "README contains correct version" "check_readme_version"
-check "VM is running" "( kubectl get -o json vms testvm | jq .status.phase ) | grep -q Running"
+check "VM is running" "( kubectl get vm testvm -o jsonpath='{.status.phase}' ) | grep -q Running"
 check "VM serial console works" "check_websocket"
 
 
