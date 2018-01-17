@@ -6,7 +6,7 @@ This demo will deploy [KubeVirt](https://www.kubevirt.io) on an existing
 This has been tested on the following distributions:
 
 - Fedora 26 (minikube [kvm
-  driver](https://github.com/kubernetes/minikube/blob/master/docs/drivers.md#kvm-driver))
+  driver](https://github.com/kubernetes/minikube/blob/master/docs/drivers.md#kvm2-driver))
 
 
 ## Quickstart
