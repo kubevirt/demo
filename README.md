@@ -49,6 +49,8 @@ $ kubectl get vms -o yaml testvm
 
 ### Accessing VMs (serial console & spice)
 
+> **Note:** This is currently broken with v0.2.0
+
 > **Note:** This requires `kubectl` from Kubernetes 1.9 or later on the client
 
 A separate binary is provided to get quick access to the serial and graphical
