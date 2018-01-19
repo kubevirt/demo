@@ -49,7 +49,7 @@ $ kubectl get vms -o yaml testvm
 
 ### Accessing VMs (serial console & spice)
 
-> **Note:** This is currently broken with v0.2.0
+> **Note:** This is [currently broken with v0.2.0](https://github.com/kubevirt/demo/issues/32)
 
 > **Note:** This requires `kubectl` from Kubernetes 1.9 or later on the client
 
