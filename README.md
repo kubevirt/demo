@@ -1,7 +1,8 @@
 # KubeVirt Demo
 
 This demo will deploy [KubeVirt](https://www.kubevirt.io) on an existing
-[minikube](https://github.com/kubernetes/minikube/).
+[minikube](https://github.com/kubernetes/minikube/) with Kubernetes 1.9 or
+later.
 
 This has been tested on the following distributions:
 
@@ -18,7 +19,7 @@ This demo assumes that [minikube](https://github.com/kubernetes/minikube/) is up
 With minikube running, you can easily deploy KubeVirt:
 
 ```bash
-$ export VERSION=v0.1.0
+$ export VERSION=v0.2.0
 $ git clone https://github.com/kubevirt/demo.git
 $ cd demo
 $ kubectl create \
@@ -48,6 +49,10 @@ $ kubectl get vms -o yaml testvm
 
 ### Accessing VMs (serial console & spice)
 
+> **Note:** This is currently broken with v0.2.0
+
+> **Note:** This requires `kubectl` from Kubernetes 1.9 or later on the client
+
 A separate binary is provided to get quick access to the serial and graphical
 ports of a VM. The tool is called `virtctl` and can be retrieved from the
 release page of KubeVirt:
@@ -60,22 +65,22 @@ $ curl -L -o virtctl \
 $ chmod a+x virtctl
 ```
 
-Once the tool is available you still need to expose the KubeVirt API service, in
-order to allow inbound access to the cluster:
-
-```
-# Expose access to the consoles via a service
-$ kubectl expose service --namespace kube-system virt-api --type=NodePort --name kubevirt-api
+We'll also use a proxy in order to ease the connection to the cluser:
+```bash
+# Use a proxy to avoid authentication hassles
+$ kubectl proxy --disable-filter=true &
+Starting to serve on 127.0.0.1:8001
+$ KUBEAPI=http://127.0.0.1:8001
 ```
 
 Now you are ready to connect to the VMs:
 
 ```
 # Connect to the serial console
-$ ./virtctl console -s $(minikube service --url -n kube-system kubevirt-api) testvm
+$ ./virtctl console -s $KUBEAPI testvm
 
 # Connect to the graphical display
-$ ./virtctl spice -s $(minikube service --url -n kube-system kubevirt-api) testvm
+$ ./virtctl spice -s $KUBEAPI testvm
 ```
 
 ## Next steps
