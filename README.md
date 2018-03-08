@@ -19,10 +19,10 @@ This demo assumes that [minikube](https://github.com/kubernetes/minikube/) is up
 With minikube running, you can easily deploy KubeVirt:
 
 ```bash
-$ export VERSION=v0.2.0
+$ export VERSION=v0.3.0
 $ git clone https://github.com/kubevirt/demo.git
 $ cd demo
-$ kubectl create \
+$ kubectl apply \
     -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt.yaml \
     -f manifests/demo-pv.yaml
 ```
@@ -48,8 +48,6 @@ $ kubectl get vms -o yaml testvm
 ```
 
 ### Accessing VMs (serial console & spice)
-
-> **Note:** This is [currently broken with v0.2.0](https://github.com/kubevirt/demo/issues/32)
 
 > **Note:** This requires `kubectl` from Kubernetes 1.9 or later on the client
 
