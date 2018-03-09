@@ -16,8 +16,6 @@ With minikube running, you can easily deploy KubeVirt:
 
 ```bash
 $ export VERSION=v0.3.0
-$ git clone https://github.com/kubevirt/demo.git
-$ cd demo
 $ kubectl create \
     -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt.yaml
 ```
@@ -32,7 +30,7 @@ Once you deployed KubeVirt you are ready to launch a VM:
 
 ```bash
 # Creating a virtual machine
-$ kubectl apply -f manifests/vm.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubevirt/demo/master/manifests/vm.yaml
 
 # After deployment you can manage VMs using the usual verbs:
 $ kubectl get ovms
@@ -59,8 +57,6 @@ ports of a VM. The tool is called `virtctl` and can be retrieved from the
 release page of KubeVirt:
 
 ```bash
-# Get virtctl
-
 $ curl -L -o virtctl \
     https://github.com/kubevirt/kubevirt/releases/download/$VERSION/virtctl-$VERSION-linux-amd64
 $ chmod +x virtctl
@@ -81,18 +77,6 @@ $ ./virtctl vnc --kubeconfig ~/.kube/config testvm
 ### User Guide
 
 Now that KubeVirt is up an running, you can take a look at the [user guide](https://kubevirt.gitbooks.io/user-guide/) to understand how you can create and manage your own virtual machines.
-
-### Verification
-
-A small script is provided to do some basic sanity checking, you can use it in order to see if KubeVirtw as deployed correctly:
-
-```
-$ ./test.sh 
-README contains correct version ... OK
-VM is running ... OK
-VM serial console works ... OK
-PASS
-```
 
 ## Appendix: Deploying minikube
 
