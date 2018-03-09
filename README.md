@@ -82,7 +82,7 @@ Now that KubeVirt is up an running, you can take a look at the [user guide](http
 
 1. If not installed, install minikube as described [here](https://github.com/kubernetes/minikube/)
 
-   1. Install the [driver](https://github.com/kubernetes/minikube/blob/master/docs/drivers.md)
+   1. Install the [kvm2 driver](https://github.com/kubernetes/minikube/blob/master/docs/drivers.md#kvm2-driver)
    2. Download the [`minikube` binary](https://github.com/kubernetes/minikube/releases)
 
 2. Launch minikube with CNI:
