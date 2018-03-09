@@ -1,0 +1,42 @@
+sudo: required
+
+env:
+- CHANGE_MINIKUBE_NONE_USER=true K8S_VER=1.9.0 K6T_VER=0.3.0
+
+notifications:
+  irc: "chat.freenode.net#kubevirt"
+
+before_script:
+# Setup minikube
+- curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v$K8S_VER/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+- curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
+
+- sudo minikube start --vm-driver=none --kubernetes-version=v$K8S_VER
+- minikube update-context
+- JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
+
+# Cleanup required for our libvirtd container
+# # FIXME needs to be fixed in KubeVirt
+- rm -vf /dev/shm ; sudo touch /dev/shm
+- rm -vf /dev/mqueue ; sudo mkdir /dev/mqueue
+
+script:
+- k_wait_all_running() { while [[ "$(kubectl get $1 --all-namespaces --field-selector=status.phase!=Running | wc -l)" -gt 1 ]]; do kubectl get $1 --all-namespaces ; sleep 6; done ; }
+# Deploy kubevirt
+- kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/v$K6T_VER/kubevirt.yaml
+- k_wait_all_running pods
+
+# Deploy workload vm
+- kubectl apply -f manifests/vm.yaml
+
+# Tests on VM
+- kubectl get ovm testvm
+- kubectl patch offlinevirtualmachine testvm --type merge -p '{"spec":{"running":true}}'
+- k_wait_all_running pods
+
+# Some additional time to schedule the VM
+- sleep 30
+- kubectl get vms testvm -o yaml
+- kubectl get vms testvm -o yaml | grep 'virtualmachinepreset.kubevirt.io/small'
+- kubectl get vms testvm -o jsonpath="{.status.phase}" | grep Running
+#- curl -Lo virtctl https://github.com/kubevirt/kubevirt/releases/download/v$K6T_VER/virtctl-v$K6T_VER-linux-amd64 && chmod +x virtctl && sudo mv virtctl /usr/local/bin

@@ -1,22 +1,46 @@
 apiVersion: kubevirt.io/v1alpha1
-kind: VirtualMachine
+kind: OfflineVirtualMachine
 metadata:
   name: testvm
 spec:
-  terminationGracePeriodSeconds: 0
+  running: false
+  selector:
+    matchLabels:
+      guest: testvm
+  template:
+    metadata:
+      labels: 
+        guest: testvm
+        kubevirt.io/size: small
+    spec:
+      domain:
+        devices:
+          disks:
+            - name: registrydisk
+              volumeName: registryvolume
+              disk:
+                bus: virtio
+            - name: cloudinitdisk
+              volumeName: cloudinitvolume
+              disk:
+                bus: virtio
+      volumes:
+        - name: registryvolume
+          registryDisk:
+            image: kubevirt/cirros-registry-disk-demo
+        - name: cloudinitvolume
+          cloudInitNoCloud:
+            userDataBase64: SGkuXG4= 
+---
+apiVersion: kubevirt.io/v1alpha1
+kind: VirtualMachinePreset
+metadata:
+  name: small
+spec:
+  selector:
+    matchLabels:
+      kubevirt.io/size: small
   domain:
     resources:
       requests:
         memory: 64M
-    devices:
-      disks:
-      - name: mydisk
-        volumeName: myvolume
-        disk:
-          dev: vda
-  volumes:
-    - name: myvolume
-      iscsi:
-        iqn: iqn.2017-01.io.kubevirt:sn.42
-        lun: 2
-        targetPortal: iscsi-demo-target.default.svc.cluster.local

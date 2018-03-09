@@ -1,14 +1,10 @@
+[![Build Status](https://travis-ci.org/kubevirt/demo.svg?branch=master)](https://travis-ci.org/kubevirt/demo)
+
 # KubeVirt Demo
 
 This demo will deploy [KubeVirt](https://www.kubevirt.io) on an existing
 [minikube](https://github.com/kubernetes/minikube/) with Kubernetes 1.9 or
 later.
-
-This has been tested on the following distributions:
-
-- Fedora 26 (minikube [kvm2
-  driver](https://github.com/kubernetes/minikube/blob/master/docs/drivers.md#kvm2-driver))
-
 
 ## Quickstart
 
@@ -19,12 +15,11 @@ This demo assumes that [minikube](https://github.com/kubernetes/minikube/) is up
 With minikube running, you can easily deploy KubeVirt:
 
 ```bash
-$ export VERSION=v0.2.0
+$ export VERSION=v0.3.0
 $ git clone https://github.com/kubevirt/demo.git
 $ cd demo
 $ kubectl create \
-    -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt.yaml \
-    -f manifests/demo-pv.yaml
+    -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt.yaml
 ```
 
 > **Note:** The initial deployment to a new minikube instance can take
@@ -40,8 +35,16 @@ Once this is done you are ready to go:
 $ kubectl create -f manifests/vm.yaml
 
 # After deployment you can manage VMs using the usual verbs:
+$ kubectl get ovms
+$ kubectl get ovms -o yaml testvm
+
+# To start an offline VM you can use
+$ kubectl patch offlinevirtualmachine testvm --type merge -p '{"spec":{"running":true}}'
 $ kubectl get vms
 $ kubectl get vms -o yaml testvm
+
+# To shut it down again
+$ kubectl patch offlinevirtualmachine testvm --type merge -p '{"spec":{"running":false}}'
 
 # To delete: kubectl delete vms testvm
 # To create your own: kubectl create -f $YOUR_VM_SPEC
