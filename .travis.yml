@@ -4,7 +4,11 @@ env:
 - CHANGE_MINIKUBE_NONE_USER=true K8S_VER=1.9.0 K6T_VER=0.3.0
 
 notifications:
-  irc: "chat.freenode.net#kubevirt"
+  irc:
+    channels:
+      - "chat.freenode.net#kubevirt"
+    on_success: change
+    on_failure: always
 
 before_script:
 # Setup minikube
