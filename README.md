@@ -28,7 +28,7 @@ $ kubectl create \
 
 ### Deploy a VirtualMachine
 
-Once this is done you are ready to go:
+Once you deployed KubeVirt you are ready to launch a VM:
 
 ```bash
 # Creating a virtual machine
