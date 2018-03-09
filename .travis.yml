@@ -21,13 +21,15 @@ before_script:
 
 - k_wait_all_running() { while [[ "$(kubectl get $1 --all-namespaces --field-selector=status.phase!=Running | wc -l)" -gt 1 ]]; do kubectl get $1 --all-namespaces ; sleep 3; done ; }
 
+script:
 # Deploy kubevirt
 - kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/v$K6T_VER/kubevirt.yaml
 - k_wait_all_running pods
 
-script:
-#- curl -Lo virtctl https://github.com/kubevirt/kubevirt/releases/download/v$K6T_VER/virtctl-v$K6T_VER-linux-amd64 && chmod +x virtctl && sudo mv virtctl /usr/local/bin
+# Deploy workload vm
 - kubectl apply -f manifests/vm.yaml
+
+# Tests on VM
 - kubectl get ovm testvm
 - kubectl patch offlinevirtualmachine testvm --type merge -p '{"spec":{"running":true}}'
 - k_wait_all_running pods
@@ -35,3 +37,4 @@ script:
 - kubectl get vms testvm -o yaml
 - kubectl get vms testvm -o yaml | grep 'virtualmachinepreset.kubevirt.io/small'
 - kubectl get vms testvm -o jsonpath="{.status.phase}" | grep Running
+#- curl -Lo virtctl https://github.com/kubevirt/kubevirt/releases/download/v$K6T_VER/virtctl-v$K6T_VER-linux-amd64 && chmod +x virtctl && sudo mv virtctl /usr/local/bin
