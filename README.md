@@ -52,8 +52,6 @@ $ kubectl patch offlinevirtualmachine testvm --type merge -p '{"spec":{"running"
 
 ### Accessing VMs (serial console & spice)
 
-> **Note:** This is [currently broken with v0.2.0](https://github.com/kubevirt/demo/issues/32)
-
 > **Note:** This requires `kubectl` from Kubernetes 1.9 or later on the client
 
 A separate binary is provided to get quick access to the serial and graphical
@@ -65,25 +63,17 @@ release page of KubeVirt:
 
 $ curl -L -o virtctl \
     https://github.com/kubevirt/kubevirt/releases/download/$VERSION/virtctl-$VERSION-linux-amd64
-$ chmod a+x virtctl
-```
-
-We'll also use a proxy in order to ease the connection to the cluser:
-```bash
-# Use a proxy to avoid authentication hassles
-$ kubectl proxy --disable-filter=true &
-Starting to serve on 127.0.0.1:8001
-$ KUBEAPI=http://127.0.0.1:8001
+$ chmod +x virtctl
 ```
 
 Now you are ready to connect to the VMs:
 
 ```
 # Connect to the serial console
-$ ./virtctl console -s $KUBEAPI testvm
+$ ./virtctl console --kubeconfig ~/.kube/config testvm
 
 # Connect to the graphical display
-$ ./virtctl spice -s $KUBEAPI testvm
+$ ./virtctl vnc --kubeconfig ~/.kube/config testvm
 ```
 
 ## Next steps
