@@ -32,7 +32,7 @@ Once you deployed KubeVirt you are ready to launch a VM:
 
 ```bash
 # Creating a virtual machine
-$ kubectl create -f manifests/vm.yaml
+$ kubectl apply -f manifests/vm.yaml
 
 # After deployment you can manage VMs using the usual verbs:
 $ kubectl get ovms
