@@ -10,7 +10,7 @@ later.
 
 ### Deploy KubeVirt
 
-This demo assumes that [minikube](https://github.com/kubernetes/minikube/) is up and running and `kubectl` available on your system. If not, then please take a look at the guide [below](#deploying-minikube)
+This demo assumes that [minikube](https://github.com/kubernetes/minikube/) is up and running and `kubectl` available on your system. If not, then please take a look at the guide [below](#appendix-deploying-minikube)
 
 With minikube running, you can easily deploy KubeVirt:
 
