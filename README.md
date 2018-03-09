@@ -94,7 +94,7 @@ VM serial console works ... OK
 PASS
 ```
 
-### Deploying minikube
+## Appendix: Deploying minikube
 
 1. If not installed, install minikube as described [here](https://github.com/kubernetes/minikube/)
 
@@ -105,7 +105,7 @@ PASS
 
 ```bash
 $ minikube start \
-  --vm-driver kvm \
+  --vm-driver kvm2 \
   --network-plugin cni
 ```
 
