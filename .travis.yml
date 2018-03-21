@@ -19,11 +19,6 @@ before_script:
 - minikube update-context
 - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
 
-# Cleanup required for our libvirtd container
-# # FIXME needs to be fixed in KubeVirt
-- rm -vf /dev/shm ; sudo touch /dev/shm
-- rm -vf /dev/mqueue ; sudo mkdir /dev/mqueue
-
 script:
 - k_wait_all_running() { while [[ "$(kubectl get $1 --all-namespaces --field-selector=status.phase!=Running | wc -l)" -gt 1 ]]; do kubectl get $1 --all-namespaces ; sleep 6; done ; }
 # Deploy kubevirt
