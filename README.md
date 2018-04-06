@@ -69,6 +69,7 @@ Now you are ready to connect to the VMs:
 $ ./virtctl console --kubeconfig ~/.kube/config testvm
 
 # Connect to the graphical display
+# Note: Requires `remote-viewer` from the `virt-viewer` package.
 $ ./virtctl vnc --kubeconfig ~/.kube/config testvm
 ```
 
