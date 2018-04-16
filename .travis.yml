@@ -46,6 +46,5 @@ script:
 - sleep 30
 - kubectl get vms testvm -o yaml
 - kubectl get vms testvm -o yaml | grep 'virtualmachinepreset.kubevirt.io/small'
-- k_wait_all_running vms
 - kubectl get vms testvm -o jsonpath="{.status.phase}" | grep Running
 #- curl -Lo virtctl https://github.com/kubevirt/kubevirt/releases/download/v$K6T_VER/virtctl-v$K6T_VER-linux-amd64 && chmod +x virtctl && sudo mv virtctl /usr/local/bin
