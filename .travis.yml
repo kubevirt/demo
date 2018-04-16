@@ -40,6 +40,7 @@ script:
 # Tests on VM
 - kubectl get ovm testvm
 - kubectl patch offlinevirtualmachine testvm --type merge -p '{"spec":{"running":true}}'
+- kubectl get vms
 - k_wait_all_running pods
 
 # Some additional time to schedule the VM
