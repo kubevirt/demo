@@ -42,7 +42,7 @@ k_wait_all_running() { while [[ "$(kubectl get $1 --all-namespaces --field-selec
   kubectl get vms testvm -o yaml
   kubectl get vms testvm -o jsonpath='{.status.phase}' | grep Running
 
-  kubectl get vms testvm -o yaml | grep 'virtualmachinepreset.kubevirt.io/small'
+  kubectl get vms testvm -o yaml | grep 'presets-applied'
 
   set +xe
 }
