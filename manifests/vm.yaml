@@ -44,3 +44,4 @@ spec:
     resources:
       requests:
         memory: 64M
+    devices: []

@@ -15,7 +15,7 @@ This demo assumes that [minikube](https://github.com/kubernetes/minikube/) is up
 With minikube running, you can easily deploy KubeVirt:
 
 ```bash
-$ export VERSION=v0.3.0
+$ export VERSION=v0.4.1
 $ kubectl create \
     -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt.yaml
 ```
@@ -23,6 +23,19 @@ $ kubectl create \
 > **Note:** The initial deployment to a new minikube instance can take
 > a long time, because a number of containers have to be pulled from the
 > internet. Use `watch kubectl get --all-namespaces pods` to monitor the progress.
+
+### Install virtctl
+
+> **Note:** This requires `kubectl` from Kubernetes 1.9 or later on the client
+
+An additional binary is provided to get quick access to the serial and graphical ports of a VM, and handle start/stop operations.
+The tool is called `virtctl` and can be retrieved from the release page of KubeVirt:
+
+```bash
+$ curl -L -o virtctl \
+    https://github.com/kubevirt/kubevirt/releases/download/$VERSION/virtctl-$VERSION-linux-amd64
+$ chmod +x virtctl
+```
 
 ### Deploy a VirtualMachine
 
@@ -37,40 +50,28 @@ $ kubectl get ovms
 $ kubectl get ovms -o yaml testvm
 
 # To start an offline VM you can use
-$ kubectl patch offlinevirtualmachine testvm --type merge -p '{"spec":{"running":true}}'
+$ ./virtctl console start testvm
 $ kubectl get vms
 $ kubectl get vms -o yaml testvm
 
 # To shut it down again
-$ kubectl patch offlinevirtualmachine testvm --type merge -p '{"spec":{"running":false}}'
+$ ./virtctl console stop testvm
 
-# To delete: kubectl delete vms testvm
-# To create your own: kubectl create -f $YOUR_VM_SPEC
+# To delete
+$ kubectl delete vms testvm
+# To create your own
+$ kubectl create -f $YOUR_VM_SPEC
 ```
 
 ### Accessing VMs (serial console & spice)
 
-> **Note:** This requires `kubectl` from Kubernetes 1.9 or later on the client
-
-A separate binary is provided to get quick access to the serial and graphical
-ports of a VM. The tool is called `virtctl` and can be retrieved from the
-release page of KubeVirt:
-
-```bash
-$ curl -L -o virtctl \
-    https://github.com/kubevirt/kubevirt/releases/download/$VERSION/virtctl-$VERSION-linux-amd64
-$ chmod +x virtctl
-```
-
-Now you are ready to connect to the VMs:
-
 ```
 # Connect to the serial console
-$ ./virtctl console --kubeconfig ~/.kube/config testvm
+$ ./virtctl console testvm
 
 # Connect to the graphical display
 # Note: Requires `remote-viewer` from the `virt-viewer` package.
-$ ./virtctl vnc --kubeconfig ~/.kube/config testvm
+$ ./virtctl vnc testvm
 ```
 
 ## Next steps
