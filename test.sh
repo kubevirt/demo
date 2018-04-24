@@ -12,10 +12,15 @@ ok() { green OK ; }
 FAIL() { red "ERR\nFAIL" ; [[ -f logs ]] && cat logs ; exit 2 ; }
 PASS() { green PASS ; }
 
+condTravisFold() {
+  [[ -n "$TRAVIS" ]] && echo "travis_fold:start:SCRIPT folding starts" || :
+  eval "$@"
+  [[ -n "$TRAVIS" ]] && echo "travis_fold:end:SCRIPT folding ends" || :
+}
+
 check() { echo -n "$1 ... "; eval "$2" > logs 2>&1 && ok || FAIL ; }
 
 k_wait_all_running() { while [[ "$(kubectl get $1 --all-namespaces --field-selector=status.phase!=Running | wc -l)" -gt 1 ]]; do kubectl get $1 --all-namespaces ; sleep 6; done ; }
-
 
 testDeploy() {
   kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/v$K6T_VER/kubevirt.yaml ;
@@ -27,7 +32,7 @@ testHasAPI() {
 }
 check "Has API" testHasAPI
 
-k_wait_all_running pods
+condTravisFold k_wait_all_running pods
 
 testCreateOVM() {
   kubectl apply -f manifests/vm.yaml
@@ -44,7 +49,7 @@ testCanLaunchVM() {
 }
 check "Can launch VM from OVM" testCanLaunchVM
 
-k_wait_all_running pods
+condTravisFold k_wait_all_running pods
 
 # Some additional time to schedule the VM
 sleep 30
