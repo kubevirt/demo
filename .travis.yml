@@ -2,6 +2,7 @@ sudo: required
 
 env:
 - CHANGE_MINIKUBE_NONE_USER=true K8S_VER=1.9.0 K6T_VER=0.4.1 M6E_VER=v0.25.2
+- CHANGE_MINIKUBE_NONE_USER=true K8S_VER=1.10.0 K6T_VER=0.4.1 M6E_VER=v0.25.2
 
 notifications:
   irc:
