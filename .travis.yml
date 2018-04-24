@@ -28,8 +28,11 @@ before_script:
 ### And https://github.com/LiliC/travis-minikube/blob/e0f26f7b388057f51a0e2558afd5f990e07b6c49/.travis.yml#L11
 - sudo mount --make-rshared /
 
-- sudo minikube start --vm-driver=none --kubernetes-version=v$K8S_VER
-- minikube update-context
+- curl -L https://github.com/minishift/minishift/releases/download/v$MINISHIFT_VER/minishift-$MINISHIFT_VER-linux-amd64.tgz | tar zx --strip-components=1 minishift-$MINISHIFT_VER-linux-amd64/minishift
+- curl -L https://github.com/openshift/origin/releases/download/v3.9.0/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit.tar.gz | tar zx --strip-components=1 openshift-origin-client-tools-v3.9.0-191fece-linux-64bit/oc
+
+#- sudo minikube start --vm-driver=none --kubernetes-version=v$K8S_VER && minikube update-context
+- sudo minishift start --vm-driver=none && minishift update-context
 - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
 
 # FIXME Workaround for https://github.com/kubernetes/kubernetes/issues/61058
