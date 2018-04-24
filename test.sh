@@ -9,8 +9,7 @@ red() { echo -e "\e[31m$@\e[0m" ; }
 green() { echo -e "\e[32m$@\e[0m" ; }
 
 ok() { green OK ; }
-failed() { red Tried $@ ; FAIL ; }
-FAIL() { red "ERR\nFAIL" ; exit 2 ; }
+FAIL() { red "ERR\nFAIL" ; [[ -f logs ]] && cat logs ; exit 2 ; }
 PASS() { green PASS ; }
 
 check() { echo -n "$1 ... "; eval "$2" > logs 2>&1 && ok || FAIL ; }
