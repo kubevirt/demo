@@ -1,7 +1,7 @@
 sudo: required
 
 env:
-- CHANGE_MINIKUBE_NONE_USER=true K8S_VER=1.9.0 K6T_VER=0.3.0 M6E_VER=v0.25.2
+- CHANGE_MINIKUBE_NONE_USER=true K8S_VER=1.9.0 K6T_VER=0.4.1 M6E_VER=v0.25.2
 
 notifications:
   irc:
@@ -25,22 +25,4 @@ before_script:
 - rm -vf /dev/mqueue ; sudo mkdir /dev/mqueue
 
 script:
-- k_wait_all_running() { while [[ "$(kubectl get $1 --all-namespaces --field-selector=status.phase!=Running | wc -l)" -gt 1 ]]; do kubectl get $1 --all-namespaces ; sleep 6; done ; }
-# Deploy kubevirt
-- kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/v$K6T_VER/kubevirt.yaml
-- k_wait_all_running pods
-
-# Deploy workload vm
-- kubectl apply -f manifests/vm.yaml
-
-# Tests on VM
-- kubectl get ovm testvm
-- kubectl patch offlinevirtualmachine testvm --type merge -p '{"spec":{"running":true}}'
-- k_wait_all_running pods
-
-# Some additional time to schedule the VM
-- sleep 30
-- kubectl get vms testvm -o yaml
-- kubectl get vms testvm -o yaml | grep 'virtualmachinepreset.kubevirt.io/small'
-- kubectl get vms testvm -o jsonpath="{.status.phase}" | grep Running
-#- curl -Lo virtctl https://github.com/kubevirt/kubevirt/releases/download/v$K6T_VER/virtctl-v$K6T_VER-linux-amd64 && chmod +x virtctl && sudo mv virtctl /usr/local/bin
+- bash test.sh $K6T_VER
