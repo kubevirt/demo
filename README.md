@@ -50,12 +50,12 @@ $ kubectl get ovms
 $ kubectl get ovms -o yaml testvm
 
 # To start an offline VM you can use
-$ ./virtctl console start testvm
+$ ./virtctl start testvm
 $ kubectl get vms
 $ kubectl get vms -o yaml testvm
 
 # To shut it down again
-$ ./virtctl console stop testvm
+$ ./virtctl stop testvm
 
 # To delete
 $ kubectl delete vms testvm
