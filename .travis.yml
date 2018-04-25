@@ -1,7 +1,13 @@
 sudo: required
 
 env:
-- CHANGE_MINIKUBE_NONE_USER=true K8S_VER=1.9.0 K6T_VER=0.4.1 M6E_VER=v0.25.2
+  global:
+    - CHANGE_MINIKUBE_NONE_USER=true
+    - K6T_VER=0.4.1
+    - M6E_VER=v0.25.2
+  matrix:
+    - K8S_VER=1.9.0
+    - K8S_VER=1.10.0
 
 notifications:
   irc:
@@ -23,6 +29,9 @@ before_script:
 # # FIXME needs to be fixed in KubeVirt
 - rm -vf /dev/shm ; sudo touch /dev/shm
 - rm -vf /dev/mqueue ; sudo mkdir /dev/mqueue
+
+# FIXME Workaround for https://github.com/kubernetes/kubernetes/issues/61058
+- sudo mount --make-rshared /run
 
 script:
 - bash test.sh $K6T_VER
