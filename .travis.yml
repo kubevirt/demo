@@ -43,6 +43,7 @@ before_script:
   base=https://github.com/docker/machine/releases/download/v0.14.0 &&
   curl -L $base/docker-machine-$(uname -s)-$(uname -m) >/tmp/docker-machine &&
   sudo install /tmp/docker-machine /usr/local/bin/docker-machine
+- ( echo -n "127.0.0.1 " ; cat /etc/ssh/ssh_host_ecdsa_key.pub ) > ~/.ssh/known_hosts
 - ssh localhost date
 - |
   docker-machine create \
