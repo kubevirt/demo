@@ -43,10 +43,12 @@ before_script:
   base=https://github.com/docker/machine/releases/download/v0.14.0 &&
   curl -L $base/docker-machine-$(uname -s)-$(uname -m) >/tmp/docker-machine &&
   sudo install /tmp/docker-machine /usr/local/bin/docker-machine
+- ssh localhost date
 - |
   docker-machine create \
-  --driver none \
-  --url=tcp://$HOSTNAME:2376 \
+  --driver generic \
+  --generic-ip-address=127.0.0.1 \
+  --generic-ssh-key ~/.ssh/id_rsa \
   openshift
 - $(docker-machine env openshift) oc cluster up --docker-machine=openshift
 - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
