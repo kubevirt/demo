@@ -1,6 +1,9 @@
 sudo: required
 dist: xenial
 
+services:
+  - docker
+
 env:
   global:
     - CHANGE_MINIKUBE_NONE_USER=true
