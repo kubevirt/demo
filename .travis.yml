@@ -42,9 +42,7 @@ before_script:
   sudo install /tmp/docker-machine /usr/local/bin/docker-machine
 - |
   docker-machine create \
-  --driver generic \
-  --generic-ip-address=127.0.0.1 \
-  --generic-ssh-key ~/.ssh/id_rsa \
+  --driver none \
   openshift
 - sudo oc cluster up --docker-machine=openshift
 - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
