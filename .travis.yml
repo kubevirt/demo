@@ -48,7 +48,7 @@ before_script:
   --driver none \
   --url=tcp://$HOSTNAME:2376 \
   openshift
-- sudo sh -c "\$(docker-machine env openshift) oc cluster up --docker-machine=openshift"
+- $(docker-machine env openshift) oc cluster up --docker-machine=openshift
 - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
 
 # FIXME Workaround for https://github.com/kubernetes/kubernetes/issues/61058
