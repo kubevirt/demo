@@ -30,5 +30,8 @@ before_script:
 - rm -vf /dev/shm ; sudo touch /dev/shm
 - rm -vf /dev/mqueue ; sudo mkdir /dev/mqueue
 
+# FIXME Workaround for https://github.com/kubernetes/kubernetes/issues/61058
+- sudo mount --make-rshared /run
+
 script:
 - bash test.sh $K6T_VER
