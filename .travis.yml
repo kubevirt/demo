@@ -33,7 +33,7 @@ before_script:
 - curl -L https://github.com/openshift/origin/releases/download/v3.9.0/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit.tar.gz | tar zx --strip-components=1 openshift-origin-client-tools-v3.9.0-191fece-linux-64bit/oc && sudo mv oc /usr/local/bin
 
 - test -n "$K8S_VER" && ( sudo minikube start --vm-driver=none --kubernetes-version=v$K8S_VER && minikube update-context ) || true
-- test -n "$ORIGIN_VER" && sudo oc cluser up --create-machine || true
+- test -n "$ORIGIN_VER" && sudo oc cluster up --create-machine || true
 - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
 
 # FIXME Workaround for https://github.com/kubernetes/kubernetes/issues/61058
