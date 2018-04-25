@@ -33,7 +33,10 @@ before_script:
 - curl -L https://github.com/openshift/origin/releases/download/v3.9.0/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit.tar.gz | tar zx --strip-components=1 openshift-origin-client-tools-v3.9.0-191fece-linux-64bit/oc && sudo mv oc /usr/local/bin
 
 #- test -n "$K8S_VER" && ( sudo minikube start --vm-driver=none --kubernetes-version=v$K8S_VER && minikube update-context ) || true
-- sudo apt install -y docker-machine
+- |
+  base=https://github.com/docker/machine/releases/download/v0.14.0 &&
+  curl -L $base/docker-machine-$(uname -s)-$(uname -m) >/tmp/docker-machine &&
+  sudo install /tmp/docker-machine /usr/local/bin/docker-machine
 - sudo oc cluster up --create-machine
 - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
 
