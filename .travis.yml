@@ -33,7 +33,8 @@ before_script:
 - curl -L https://github.com/openshift/origin/releases/download/v3.9.0/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit.tar.gz | tar zx --strip-components=1 openshift-origin-client-tools-v3.9.0-191fece-linux-64bit/oc && sudo mv oc /usr/local/bin
 
 #- test -n "$K8S_VER" && ( sudo minikube start --vm-driver=none --kubernetes-version=v$K8S_VER && minikube update-context ) || true
-- sudo apt update && sudo apt install openssh-client
+- sudo apt update && sudo apt install openssh-client openssh-server
+- sudo systemctl start ssh
 - ssh-keygen -f ~/.ssh/id_rsa -N ""
 - cat ~/.ssh/id_rsa.pub > ~/.ssh/authorized_keys
 - |
