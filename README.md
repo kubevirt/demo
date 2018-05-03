@@ -58,7 +58,7 @@ $ kubectl get vms -o yaml testvm
 $ ./virtctl stop testvm
 
 # To delete
-$ kubectl delete vms testvm
+$ kubectl delete ovms testvm
 # To create your own
 $ kubectl create -f $YOUR_VM_SPEC
 ```
