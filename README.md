@@ -12,7 +12,7 @@ later.
 
 This demo assumes that [minikube](https://github.com/kubernetes/minikube/) is up and running and `kubectl` available on your system. If not, then please take a look at the guide [below](#appendix-deploying-minikube)
 
-With minikube running, you can easily deploy KubeVirt:
+With minikube *RUNNING*, you can easily deploy KubeVirt:
 
 ```bash
 $ export VERSION=v0.4.1
@@ -82,12 +82,19 @@ Now that KubeVirt is up an running, you can take a look at the [user guide](http
 
 ## Appendix: Deploying minikube
 
-1. If not installed, install minikube as described [here](https://github.com/kubernetes/minikube/)
+1. If not installed, install minikube as described [here](https://github.com/kubernetes/minikube/):
 
    1. Install the [kvm2 driver](https://github.com/kubernetes/minikube/blob/master/docs/drivers.md#kvm2-driver)
    2. Download the [`minikube` binary](https://github.com/kubernetes/minikube/releases)
 
-2. Launch minikube with CNI:
+2. Verify nested virtualization is enabled on the machine minikube is being installed on:
+
+```bash
+$ cat /sys/module/kvm_intel/parameters/nested
+Y
+```
+
+3. Launch minikube with CNI:
 
 ```bash
 $ minikube start \
@@ -95,4 +102,4 @@ $ minikube start \
   --network-plugin cni
 ```
 
-3. Install `kubectl` via a package manager or [download](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-curl) it
+4. Install `kubectl` via a [package manager](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-native-package-management) or [download](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-curl) it
