@@ -57,6 +57,8 @@ $ chmod +x virtctl
 
 
 ### Create an Offline  VM
+Note: Install `kubectl` via a [package manager](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-native-package-management) or [download](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-curl) it
+
 kubectl apply -f https://raw.githubusercontent.com/kubevirt/demo/master/manifests/vm.yaml
 
 
@@ -74,8 +76,8 @@ To start an offline VM you can use:
 $ ./virtctl start testvm
 
 $ oc get vms
-$ oc get vms -o yaml testvm
 
+$ oc get vms -o yaml testvm
 
 To shut it down again:
 
@@ -101,5 +103,3 @@ $ ./virtctl vnc testvm
 Install kvm driver if not exists:
  yum install -y qemu-kvm
 
-[Optional]
-Install `kubectl` via a [package manager](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-native-package-management) or [download](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-curl) it
