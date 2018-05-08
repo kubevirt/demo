@@ -22,7 +22,7 @@ k_wait_all_running() { while [[ "$(kubectl get $1 --all-namespaces --field-selec
 {
   set -xe
 
-  kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/v$K6T_VER/kubevirt.yaml ;
+  kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$K6T_VER/kubevirt.yaml ;
 
   kubectl api-versions | grep kubevirt.io
 
