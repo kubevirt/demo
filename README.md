@@ -63,7 +63,7 @@ $ kubectl delete ovms testvm
 $ kubectl create -f $YOUR_VM_SPEC
 ```
 
-### Accessing VMs (serial console & spice)
+### Accessing VMs (serial console & vnc)
 
 ```
 # Connect to the serial console
