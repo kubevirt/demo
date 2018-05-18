@@ -3,7 +3,7 @@ sudo: required
 env:
   global:
     - CHANGE_MINIKUBE_NONE_USER=true
-    - K6T_VER=0.4.1
+    - K6T_VER=0.5.0
     - M6E_VER=v0.25.2
   matrix:
     - K8S_VER=1.9.0
