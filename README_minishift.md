@@ -44,7 +44,7 @@ Note: In case you get the following error: "...Hit github rate limit: GET https:
 ```
 $ oc login -u system:admin
 
-$ export VERSION=v0.4.1
+$ export VERSION=v0.5.0
 $ kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt.yaml
 ```
 
@@ -61,7 +61,7 @@ $ oc adm policy add-scc-to-user hostmount-anyuid -z kubevirt-infra -n kube-syste
 This tool provides quick access to the serial and graphical ports of a VM, and handle start/stop operations.
 
 ```
-$ export VERSION=v0.4.1
+$ export VERSION=v0.5.0
 $ curl -L -o virtctl https://github.com/kubevirt/kubevirt/releases/download/$VERSION/virtctl-$VERSION-linux-amd64
 $ chmod +x virtctl
 ```
