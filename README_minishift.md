@@ -12,9 +12,12 @@ Copy the contents of the directory to your preferred location and add the minish
 
 
 #### Start Minishift
-```$ minishift start```
+```
+$ minishift start
+```
 
 You should expect to see the following:
+
 ```
 -- Starting local OpenShift cluster using 'kvm' hypervisor...
 ...
@@ -31,32 +34,37 @@ You should expect to see the following:
 
 Note: for further information please see https://docs.openshift.org/latest/minishift/getting-started/quickstart.html
 ```
+
 Note: In case you get the following error: "...Hit github rate limit: GET https://api.github.com/repos/openshift/origin/releases: 403 API rate limit exceeded...", do the following:
 1) goto your account setting in GitHub -> Developer settings -> Personal access tokens, and create a new token.
 2) export this token: export MINISHIFT_GITHUB_API_TOKEN=<the token id you generated>
 
 #### Install KubeVirt
 
-```$ oc login -u system:admin```
+```
+$ oc login -u system:admin
 
-```$ export VERSION=v0.4.1```
-```$ kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt.yaml```
+$ export VERSION=v0.4.1
+$ kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt.yaml
+```
 
 Define the following policies:
 
-```$ oc adm policy add-scc-to-user privileged -z kubevirt-privileged -n kube-system```
-
-```$ oc adm policy add-scc-to-user privileged -z kubevirt-controller -n kube-system```
-
-```$ oc adm policy add-scc-to-user hostmount-anyuid -z kubevirt-infra -n kube-system```
+```
+$ oc adm policy add-scc-to-user privileged -z kubevirt-privileged -n kube-system
+$ oc adm policy add-scc-to-user privileged -z kubevirt-controller -n kube-system
+$ oc adm policy add-scc-to-user hostmount-anyuid -z kubevirt-infra -n kube-system
+```
 
 
 #### Install virtctl
 This tool provides quick access to the serial and graphical ports of a VM, and handle start/stop operations.
 
-``` $ export VERSION=v0.4.1```
-``` $ curl -L -o virtctl https://github.com/kubevirt/kubevirt/releases/download/$VERSION/virtctl-$VERSION-linux-amd64```
-``` $ chmod +x virtctl```
+```
+$ export VERSION=v0.4.1
+$ curl -L -o virtctl https://github.com/kubevirt/kubevirt/releases/download/$VERSION/virtctl-$VERSION-linux-amd64
+$ chmod +x virtctl
+```
 
 
 #### Create an Offline  VM
@@ -97,11 +105,16 @@ $ oc delete ovms testvm
 #### Accessing VMs (serial console & spice)
 
 Connect to the serial console
-```$ ./virtctl console testvm```
+
+```
+$ ./virtctl console testvm
+```
 
 Connect to the graphical display
 Note: Requires `remote-viewer` from the `virt-viewer` package.
-```$ ./virtctl vnc testvm```
+```
+$ ./virtctl vnc testvm
+```
 
 
 #### Appendix:
