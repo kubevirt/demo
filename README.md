@@ -15,7 +15,7 @@ This demo assumes that [minikube](https://github.com/kubernetes/minikube/) is up
 With minikube *RUNNING*, you can easily deploy KubeVirt:
 
 ```bash
-$ export VERSION=v0.4.1
+$ export VERSION=v0.5.0
 $ kubectl create \
     -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt.yaml
 ```
@@ -63,7 +63,7 @@ $ kubectl delete ovms testvm
 $ kubectl create -f $YOUR_VM_SPEC
 ```
 
-### Accessing VMs (serial console & spice)
+### Accessing VMs (serial console & vnc)
 
 ```
 # Connect to the serial console

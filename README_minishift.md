@@ -15,6 +15,7 @@ Copy the contents of the directory to your preferred location and add the minish
 ```$ minishift start```
 
 You should expect to see the following:
+```
 -- Starting local OpenShift cluster using 'kvm' hypervisor...
 ...
    OpenShift server started.
@@ -29,6 +30,10 @@ You should expect to see the following:
        oc login -u system:admin
 
 Note: for further information please see https://docs.openshift.org/latest/minishift/getting-started/quickstart.html
+```
+Note: In case you get the following error: "...Hit github rate limit: GET https://api.github.com/repos/openshift/origin/releases: 403 API rate limit exceeded...", do the following:
+1) goto your account setting in GitHub -> Developer settings -> Personal access tokens, and create a new token.
+2) export this token: export MINISHIFT_GITHUB_API_TOKEN=<the token id you generated>
 
 #### Install KubeVirt
 
@@ -77,7 +82,6 @@ $ ./virtctl start testvm
 To get a list of existing virtual machines:
 ```
 $ oc get vms
-
 $ oc get vms -o yaml testvm
 ```
 
@@ -105,4 +109,5 @@ Note: Requires `remote-viewer` from the `virt-viewer` package.
 
 Install kvm driver if not exists:
 ```$  yum install -y qemu-kvm```
+
 
