@@ -70,7 +70,6 @@ Note: Install `kubectl` via a [package manager](https://kubernetes.io/docs/tasks
 To get a list of existing offline Virtual Machines:
 ```
 $ oc get ovms
-
 $ oc get ovms -o yaml testvm
 ```
 
@@ -109,5 +108,4 @@ Note: Requires `remote-viewer` from the `virt-viewer` package.
 
 Install kvm driver if not exists:
 ```$  yum install -y qemu-kvm```
-
-
+ 
