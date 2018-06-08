@@ -80,7 +80,7 @@ $ ./virtctl vnc testvm
 
 ### User Guide
 
-Now that KubeVirt is up an running, you can take a look at the [user guide](https://www.kubevirt.io/user-guide/#/) to understand how you can create and manage your own virtual machines.
+Now that KubeVirt is up an running, you can take a look at the [user guide](http://docs.kubevirt.io/) to understand how you can create and manage your own virtual machines.
 
 ## Appendix: Deploying minikube
 
