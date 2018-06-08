@@ -6,6 +6,8 @@ This demo will deploy [KubeVirt](https://www.kubevirt.io) on an existing
 [minikube](https://github.com/kubernetes/minikube/) with Kubernetes 1.9 or
 later.
 
+> **Note:** Follow [this guide](README_minishift.md) in order to deploy the KubeVirt demo in minishift (running OpenShift).
+
 ## Quickstart
 
 ### Deploy KubeVirt
