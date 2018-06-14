@@ -3,7 +3,7 @@ sudo: required
 env:
   global:
     - CHANGE_MINIKUBE_NONE_USER=true
-    - KUBEVIRT_VER=0.5.0
+    - KUBEVIRT_VER=0.7.0-alpha.0
     - MINIKUBE_VER=v0.25.2
   matrix:
     - K8S_VER=1.9.0
