@@ -7,7 +7,7 @@ env:
     - MINIKUBE_VER=v0.25.2
   matrix:
     - K8S_VER=1.9.0
-    - K8S_VER=1.10.0
+    - K8S_VER=1.10.4
 
 notifications:
   irc:
