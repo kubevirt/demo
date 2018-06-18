@@ -51,8 +51,9 @@ $ kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/$VERS
 Define the following policies:
 
 ```
-$ oc adm policy add-scc-to-user privileged -z kubevirt-privileged -n kube-system
-$ oc adm policy add-scc-to-user privileged -z kubevirt-controller -n kube-system
+$ oc adm policy add-scc-to-user privileged -n kube-system -z kubevirt-privileged
+$ oc adm policy add-scc-to-user privileged -n kube-system -z kubevirt-controller
+$ oc adm policy add-scc-to-user privileged -n kube-system -z kubevirt-apiserver
 $ oc adm policy add-scc-to-user hostmount-anyuid -z kubevirt-infra -n kube-system
 ```
 
