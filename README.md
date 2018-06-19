@@ -17,7 +17,7 @@ This demo assumes that [minikube](https://github.com/kubernetes/minikube/) is up
 With minikube *RUNNING*, you can easily deploy KubeVirt:
 
 ```bash
-$ export VERSION=v0.5.0
+$ export VERSION=v0.7.0
 $ kubectl create \
     -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt.yaml
 ```
