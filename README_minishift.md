@@ -44,7 +44,7 @@ Note: In case you get the following error: "...Hit github rate limit: GET https:
 ```
 $ oc login -u system:admin
 
-$ export VERSION=v0.5.0
+$ export VERSION=v0.7.0
 $ kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt.yaml
 ```
 
