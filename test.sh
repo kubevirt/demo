@@ -16,6 +16,7 @@ condTravisFold() {
   [[ -n "$TRAVIS" ]] && echo "travis_fold:end:SCRIPT folding ends" || :
 }
 
+timeout_while() { timeout $1 sh -c "while true; do $2 && break || : ; sleep 1 ; done" ; }
 
 k_wait_all_running() { while [[ "$(kubectl get $1 --all-namespaces --field-selector=status.phase!=Running | wc -l)" -gt 1 ]]; do kubectl get $1 --all-namespaces ; sleep 6; done ; }
 
@@ -35,15 +36,13 @@ k_wait_all_running() { while [[ "$(kubectl get $1 --all-namespaces --field-selec
   kubectl get vm testvm
 
   kubectl patch virtualmachine testvm --type merge -p '{"spec":{"running":true}}'
+  timeout_while 10s "kubectl get vmis | grep testvm"
 
   condTravisFold k_wait_all_running pods
 
   # Some additional time to schedule the VM
   kubectl get vmis testvm -o yaml
-  timeout 1m sh -c "while true; do \
-    kubectl get vmis testvm -o jsonpath='{.status.phase}' | grep Running && break || : ; \
-    sleep 1 ; \
-  done"
+  timeout_while 1m "kubectl get vmis testvm -o jsonpath='{.status.phase}' | grep Running"
 
   kubectl get vmis testvm -o yaml | grep 'presets-applied'
 
