@@ -6,8 +6,8 @@ env:
     - KUBEVIRT_VER=0.7.0-alpha.2
     - MINIKUBE_VER=v0.25.2
   matrix:
-    - K8S_VER=1.9.0
-    - K8S_VER=1.10.4
+    #- K8S_VER=1.9.0
+    - K8S_VER=1.10.0
 
 notifications:
   irc:
