@@ -39,22 +39,30 @@ Note: In case you get the following error: "...Hit github rate limit: GET https:
 1) goto your account setting in GitHub -> Developer settings -> Personal access tokens, and create a new token.
 2) export this token: export MINISHIFT_GITHUB_API_TOKEN=<the token id you generated>
 
+#### Enable nesting
+
+minishift does not support nesting, thus we need to use software emulation:
+
+```
+$ oc create configmap -n kube-system kubevirt-config --from-literal debug.allowEmulation=true
+configmap "kubevirt-config" created
+```
+
 #### Install KubeVirt
 
 ```
 $ oc login -u system:admin
 
-$ export VERSION=v0.5.0
-$ kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt.yaml
+$ export VERSION=v0.7.0-alpha.1
+$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt.yaml
 ```
 
 Define the following policies:
 
 ```
-$ oc adm policy add-scc-to-user privileged -n kube-system -z kubevirt-privileged
-$ oc adm policy add-scc-to-user privileged -n kube-system -z kubevirt-controller
-$ oc adm policy add-scc-to-user privileged -n kube-system -z kubevirt-apiserver
-$ oc adm policy add-scc-to-user hostmount-anyuid -z kubevirt-infra -n kube-system
+oc adm policy add-scc-to-user privileged -n kube-system -z kubevirt-privileged
+oc adm policy add-scc-to-user privileged -n kube-system -z kubevirt-controller
+oc adm policy add-scc-to-user privileged -n kube-system -z kubevirt-apiserver
 ```
 
 
@@ -71,7 +79,9 @@ $ chmod +x virtctl
 #### Create an Offline  VM
 Note: Install `kubectl` via a [package manager](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-native-package-management) or [download](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-curl) it
 
-```$ kubectl apply -f https://raw.githubusercontent.com/kubevirt/demo/master/manifests/vm.yaml```
+```
+$ kubectl apply -f https://raw.githubusercontent.com/kubevirt/demo/master/manifests/vm.yaml
+```
 
 
 #### Manage Virtual Machines (optional):
