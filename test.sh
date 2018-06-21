@@ -22,9 +22,9 @@ k_wait_all_running() { while [[ "$(kubectl get $1 --all-namespaces --field-selec
 {
   set -xe
 
-  kubectl create configmap -n kube-system kubevirt-config --from-literal debug.allowEmulation=true
+  kubectl create configmap -n kube-system kubevirt-config --from-literal debug.allowEmulation=true || :
 
-  kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/v$K6T_VER/kubevirt.yaml ;
+  kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$K6T_VER/kubevirt.yaml ;
 
   kubectl api-versions | grep kubevirt.io
 
@@ -39,10 +39,11 @@ k_wait_all_running() { while [[ "$(kubectl get $1 --all-namespaces --field-selec
   condTravisFold k_wait_all_running pods
 
   # Some additional time to schedule the VM
-  sleep 30
-
   kubectl get vmis testvm -o yaml
-  kubectl get vmis testvm -o jsonpath='{.status.phase}' | grep Running
+  timeout 1m sh -c "while true; do \
+    kubectl get vmis testvm -o jsonpath='{.status.phase}' | grep Running && break || : ; \
+    sleep 1 ; \
+  done"
 
   kubectl get vmis testvm -o yaml | grep 'presets-applied'
 
