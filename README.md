@@ -14,10 +14,15 @@ later.
 
 This demo assumes that [minikube](https://github.com/kubernetes/minikube/) is up and running and `kubectl` available on your system. If not, then please take a look at the guide [below](#appendix-deploying-minikube)
 
+> **Note:** If your host does not support hardware virtualization, then you will
+> need to enable software emulation using:
+> `kubectl create configmap -n kube-system kubevirt-config --from-literal
+> debug.allowEmulation=true`
+
 With minikube *RUNNING*, you can easily deploy KubeVirt:
 
 ```bash
-$ export VERSION=v0.7.0-alpha.0
+$ export VERSION=v0.7.0-alpha.2
 $ kubectl apply \
     -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt.yaml
 ```
