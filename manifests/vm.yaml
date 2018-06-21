@@ -1,5 +1,5 @@
-apiVersion: kubevirt.io/v1alpha1
-kind: OfflineVirtualMachine
+apiVersion: kubevirt.io/v1alpha2
+kind: VirtualMachine
 metadata:
   name: testvm
 spec:
@@ -32,8 +32,8 @@ spec:
           cloudInitNoCloud:
             userDataBase64: SGkuXG4= 
 ---
-apiVersion: kubevirt.io/v1alpha1
-kind: VirtualMachinePreset
+apiVersion: kubevirt.io/v1alpha2
+kind: VirtualMachineInstancePreset
 metadata:
   name: small
 spec:

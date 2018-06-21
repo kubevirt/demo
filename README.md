@@ -14,11 +14,16 @@ later.
 
 This demo assumes that [minikube](https://github.com/kubernetes/minikube/) is up and running and `kubectl` available on your system. If not, then please take a look at the guide [below](#appendix-deploying-minikube)
 
+> **Note:** If your host does not support hardware virtualization, then you will
+> need to enable software emulation using:
+> `kubectl create configmap -n kube-system kubevirt-config --from-literal
+> debug.allowEmulation=true`
+
 With minikube *RUNNING*, you can easily deploy KubeVirt:
 
 ```bash
-$ export VERSION=v0.5.0
-$ kubectl create \
+$ export VERSION=v0.7.0-alpha.2
+$ kubectl apply \
     -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt.yaml
 ```
 
@@ -48,21 +53,23 @@ Once you deployed KubeVirt you are ready to launch a VM:
 $ kubectl apply -f https://raw.githubusercontent.com/kubevirt/demo/master/manifests/vm.yaml
 
 # After deployment you can manage VMs using the usual verbs:
-$ kubectl get ovms
-$ kubectl get ovms -o yaml testvm
-
-# To start an offline VM you can use
-$ ./virtctl start testvm
 $ kubectl get vms
 $ kubectl get vms -o yaml testvm
+
+# To start a VM you can use
+$ ./virtctl start testvm
+
+# Afterwards you can inspect the instances
+$ kubectl get vmis
+$ kubectl get vmis -o yaml testvm
 
 # To shut it down again
 $ ./virtctl stop testvm
 
 # To delete
-$ kubectl delete ovms testvm
+$ kubectl delete vms testvm
 # To create your own
-$ kubectl create -f $YOUR_VM_SPEC
+$ kubectl apply -f $YOUR_VM_SPEC
 ```
 
 ### Accessing VMs (serial console & vnc)
