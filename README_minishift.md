@@ -54,7 +54,7 @@ configmap "kubevirt-config" created
 $ oc login -u system:admin
 
 $ export VERSION=v0.7.0-alpha.1
-$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt.yaml
+$ oc apply -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt.yaml
 ```
 
 Define the following policies:
@@ -77,10 +77,9 @@ $ chmod +x virtctl
 
 
 #### Create an Offline  VM
-Note: Install `kubectl` via a [package manager](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-native-package-management) or [download](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-curl) it
 
 ```
-$ kubectl apply -f https://raw.githubusercontent.com/kubevirt/demo/master/manifests/vm.yaml
+$ oc apply -f https://raw.githubusercontent.com/kubevirt/demo/master/manifests/vm.yaml
 ```
 
 
