@@ -53,7 +53,7 @@ configmap "kubevirt-config" created
 ```
 $ oc login -u system:admin
 
-$ export VERSION=v0.7.0-alpha.1
+$ export VERSION=v0.7.0-alpha.2
 $ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt.yaml
 ```
 
