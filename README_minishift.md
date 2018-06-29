@@ -88,8 +88,8 @@ $ kubectl apply -f https://raw.githubusercontent.com/kubevirt/demo/master/manife
 
 To get a list of existing offline Virtual Machines:
 ```
-$ oc get ovms
-$ oc get ovms -o yaml testvm
+$ oc get vms
+$ oc get vms -o yaml testvm
 ```
 
 To start an offline VM you can use:
@@ -110,7 +110,7 @@ $ ./virtctl stop testvm
 
 To delete an offline Virtual Machine:
 ```
-$ oc delete ovms testvm
+$ oc delete vms testvm
 ```
 
 #### Accessing VMs (serial console & spice)
