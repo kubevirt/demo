@@ -70,7 +70,6 @@ oc adm policy add-scc-to-user privileged -n kube-system -z kubevirt-apiserver
 This tool provides quick access to the serial and graphical ports of a VM, and handle start/stop operations.
 
 ```
-$ export VERSION=v0.5.0
 $ curl -L -o virtctl https://github.com/kubevirt/kubevirt/releases/download/$VERSION/virtctl-$VERSION-linux-amd64
 $ chmod +x virtctl
 ```
