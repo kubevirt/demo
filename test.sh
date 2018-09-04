@@ -23,7 +23,7 @@ k_wait_all_running() { while [[ "$(kubectl get $1 --all-namespaces --field-selec
 {
   set -xe
 
-  kubectl create configmap -n kube-system kubevirt-config --from-literal debug.allowEmulation=true || :
+  kubectl create configmap -n kube-system kubevirt-config --from-literal debug.useEmulation=true || :
 
   kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$K6T_VER/kubevirt.yaml ;
 
