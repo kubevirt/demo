@@ -1,6 +1,9 @@
 sudo: required
 dist: xenial
 
+#services:
+#  - docker
+
 env:
   global:
     - CHANGE_MINIKUBE_NONE_USER=true
@@ -10,30 +13,55 @@ env:
   matrix:
     - K8S_VER=1.10.7
     - K8S_VER=1.11.2
+    - ORIGIN_VER=3.10.0
 
-notifications:
-  irc:
-    channels:
-      - "chat.freenode.net#kubevirt"
-    on_success: change
-    on_failure: always
+#notifications:
+#  irc:
+#    channels:
+#      - "chat.freenode.net#kubevirt"
+#    on_success: change
+#    on_failure: always
 
 before_script:
-# Setup minikube
-- curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v$K8S_VER/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
-- curl -L https://github.com/kubernetes-incubator/cri-tools/releases/download/v1.11.1/crictl-v1.11.1-linux-amd64.tar.gz | tar zx crictl && chmod +x crictl && sudo mv crictl /usr/local/bin/
-- curl -Lo minikube https://storage.googleapis.com/minikube/releases/$MINIKUBE_VER/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
+- |
+  ## FIXME Workaround for https://github.com/kubernetes/kubernetes/issues/61058
+  ### And https://github.com/LiliC/travis-minikube/blob/e0f26f7b388057f51a0e2558afd5f990e07b6c49/.travis.yml#L11
+  sudo mount --make-rshared /
 
-## FIXME Workaround for https://github.com/kubernetes/kubernetes/issues/61058
-### And https://github.com/LiliC/travis-minikube/blob/e0f26f7b388057f51a0e2558afd5f990e07b6c49/.travis.yml#L11
-- sudo mount --make-rshared /
+- |
+  if [ -n "$K8S_VER" ];
+  then
+    curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v$K8S_VER/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+    curl -L https://github.com/kubernetes-incubator/cri-tools/releases/download/v1.11.1/crictl-v1.11.1-linux-amd64.tar.gz | tar zx crictl && chmod +x crictl && sudo mv crictl /usr/local/bin/
+    curl -Lo minikube https://storage.googleapis.com/minikube/releases/$MINIKUBE_VER/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
 
-- sudo minikube start --vm-driver=none --kubernetes-version=v$K8S_VER
-- minikube update-context
-- JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
+    sudo minikube start \
+      --vm-driver=none \
+      --kubernetes-version=v$K8S_VER \
+      --feature-gates=DevicePlugins=true 
 
-# FIXME Workaround for https://github.com/kubernetes/kubernetes/issues/61058
-- sudo mount --make-rshared /run
+    minikube update-context
+  fi
+
+- |
+  if [ -n "$ORIGIN_VER" ];
+  then
+    sudo sed -i 's%DOCKER_OPTS=\"%DOCKER_OPTS=\"--insecure-registry 172.30.0.0/16 %' /etc/default/docker
+    sudo systemctl restart docker
+
+    curl -L https://github.com/openshift/origin/releases/download/v3.10.0/openshift-origin-client-tools-v3.10.0-dd10d17-linux-64bit.tar.gz | tar zx --strip-components=1 openshift-origin-client-tools-v3.10.0-dd10d17-linux-64bit/oc && sudo mv oc /usr/local/bin
+    sudo ln -f /usr/local/bin/oc /usr/local/bin/kubectl
+
+    bash -x setup_origin.sh
+  fi
+- |
+  #JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do kubectl get nodes -o yaml ; sleep 1; done
+  while [[ "$(kubectl get pods --all-namespaces | egrep -vi 'running|completed' | wc -l)" -gt 1 ]]; do kubectl get pods --all-namespaces ; sleep 3; done
 
 script:
-- bash test.sh $KUBEVIRT_VER
+- timeout 5m bash test.sh $KUBEVIRT_VER
+
+after_script:
+- kubectl describe nodes
+- kubectl describe pods --all-namespaces
+- kubectl get events --all-namespaces

@@ -18,7 +18,13 @@ condTravisFold() {
 
 timeout_while() { timeout $1 sh -c "while true; do $2 && break || : ; sleep 1 ; done" ; }
 
-k_wait_all_running() { while [[ "$(kubectl get $1 --all-namespaces --field-selector=status.phase!=Running | wc -l)" -gt 1 ]]; do kubectl get $1 --all-namespaces ; sleep 6; done ; }
+k_wait_all_running() {
+  get_remaining_pods() { kubectl get pods --all-namespaces --field-selector=status.phase!=Running,status.phase!=Succeeded ; }
+  while [[ "$( get_remaining_pods | wc -l)" -gt 1 ]];
+  do
+    kubectl get pods --all-namespaces
+    sleep 6;
+  done ; }
 
 {
   set -xe
@@ -29,16 +35,19 @@ k_wait_all_running() { while [[ "$(kubectl get $1 --all-namespaces --field-selec
 
   kubectl api-versions | grep kubevirt.io
 
-  condTravisFold k_wait_all_running pods
+  condTravisFold k_wait_all_running
+
+  kubectl describe nodes
+  kubectl describe pods --all-namespaces
 
   kubectl apply -f manifests/vm.yaml
 
   kubectl get vm testvm
 
   kubectl patch virtualmachine testvm --type merge -p '{"spec":{"running":true}}'
-  timeout_while 10s "kubectl get vmis | grep testvm"
+  timeout_while 30s "kubectl get vmis | grep testvm"
 
-  condTravisFold k_wait_all_running pods
+  condTravisFold k_wait_all_running
 
   # Some additional time to schedule the VM
   kubectl get vmis testvm -o yaml
