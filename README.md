@@ -27,9 +27,18 @@ $ kubectl apply \
     -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt.yaml
 ```
 
-> **Note:** The initial deployment to a new minikube instance can take
-> a long time, because a number of containers have to be pulled from the
-> internet. Use `watch kubectl get --all-namespaces pods` to monitor the progress.
+> **Note:** The initial deployment can take a long time, because a number of
+> containers have to be pulled from the internet. Use
+> `watch kubectl get --all-namespaces pods` to monitor the progress.
+
+In addition to the deployment, on OpenShift Origin it is required to grant the
+KubeVirt components some additional roles:
+
+```bash
+oc adm policy add-scc-to-user privileged -n kube-system -z kubevirt-privileged
+oc adm policy add-scc-to-user privileged -n kube-system -z kubevirt-controller
+oc adm policy add-scc-to-user privileged -n kube-system -z kubevirt-apiserver
+```
 
 ### Install virtctl
 
@@ -89,26 +98,69 @@ $ ./virtctl vnc testvm
 
 Now that KubeVirt is up an running, you can take a look at the [user guide](http://docs.kubevirt.io/) to understand how you can create and manage your own virtual machines.
 
-## Appendix: Deploying minikube
+## Appendix
 
-1. If not installed, install minikube as described [here](https://github.com/kubernetes/minikube/):
+### Verify that nested virtualization is enabled
 
-   1. Install the [kvm2 driver](https://github.com/kubernetes/minikube/blob/master/docs/drivers.md#kvm2-driver)
-   2. Download the [`minikube` binary](https://github.com/kubernetes/minikube/releases)
-
-2. Verify nested virtualization is enabled on the machine minikube is being installed on:
+If nested virtualization is can be verified with the following:
 
 ```bash
 $ cat /sys/module/kvm_intel/parameters/nested
 Y
 ```
 
-3. Launch minikube with CNI:
+### Setting up `minikube`
+
+1. If not installed, install minikube as described [here](https://github.com/kubernetes/minikube/):
+
+   1. Install the [kvm2 driver](https://github.com/kubernetes/minikube/blob/master/docs/drivers.md#kvm2-driver)
+   2. Download the [`minikube` binary](https://github.com/kubernetes/minikube/releases)
+
+2. Launch minikube:
 
 ```bash
 $ minikube start \
   --vm-driver kvm2 \
-  --network-plugin cni
+  --feature-gates=DevicePlugins=true
 ```
 
-4. Install `kubectl` via a [package manager](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-native-package-management) or [download](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-curl) it
+3. Install `kubectl` via a [package manager](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-native-package-management) or [download](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-curl) it
+
+## Setting up `oc cluster up`
+
+> **Note:** `oc cluster` currently (v3.10) has a bug which requires some
+> additional steps.
+
+1. Get the `oc´ tool
+
+  1. Download the _openshift-client-tools_ tarball from [here](https://github.com/openshift/origin/releases):
+  2. Extract the `oc`t ool from the API tool `tar xf openshift-origin-client-tools*.tar.gz`
+
+2. Launch `oc cluster`:
+
+```bash
+oc cluster up --skip-registry-check --enable=-router,-sample-templates
+
+```
+
+Now two workarounds:
+
+```bash
+oc cluster down
+# Enable device plugins
+sed -i "/kind/ a\kubeletArguments:\n  feature-gates:\n  - DevicePlugins=true" $PWD/openshift.local.clusterup/node/node-config.yaml
+oc cluster up --skip-registry-check
+
+# Fix device plugins
+# Workaround for https://github.com/openshift/origin/pull/20351
+KUBELET_ROOTFS=$(sudo docker inspect $(sudo docker ps | grep kubelet | cut -d" " -f1) | jq -r ".[0].GraphDriver.Data.MergedDir" -)
+sudo mkdir -p /var/lib/kubelet/device-plugins $KUBELET_ROOTFS/var/lib/kubelet/device-plugins
+sudo mount -o bind $KUBELET_ROOTFS/var/lib/kubelet/device-plugins /var/lib/kubelet/device-plugins
+sudo ls /var/lib/kubelet/device-plugins
+```
+
+And finally login:
+
+```bash
+oc login -u system:admin
+```
