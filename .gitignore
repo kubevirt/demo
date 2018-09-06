@@ -1,3 +1,4 @@
 kubectl
 minikube
 virtctl
+openshift.local.clusterup
