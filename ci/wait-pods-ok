@@ -1,0 +1,13 @@
+#!/bin/bash
+
+get_remaining_pods() {
+  kubectl get pods \
+    --all-namespaces \
+    --field-selector=status.phase!=Running,status.phase!=Succeeded ;
+}
+
+while [[ "$( get_remaining_pods 2>&1 | wc -l)" -gt 1 ]];
+do
+  kubectl get pods --all-namespaces
+  sleep 6;
+done
