@@ -29,4 +29,4 @@ before_script:
 - bash -x ci/deploy-kubevirt $CDIST $KUBEVIRT_VER
 
 script:
-- timeout 5m bash ci/test.sh
+- timeout 5m bash test.sh
