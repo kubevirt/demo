@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/kubevirt/demo.svg?branch=master)](https://travis-ci.org/kubevirt/demo)
+[![Build Status](https://travis-ci.org/kubevirt/demo.svg?branch=master)](https://travis-ci.org/kubevirt/demo) (minikube and `oc cluster`)
 
 # KubeVirt Demo
 
