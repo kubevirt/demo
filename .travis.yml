@@ -12,12 +12,12 @@ env:
     - CDIST=kubernetes CVER=1.11.2
     - CDIST=origin CVER=3.10.0
 
-#notifications:
-#  irc:
-#    channels:
-#      - "chat.freenode.net#kubevirt"
-#    on_success: change
-#    on_failure: always
+notifications:
+  irc:
+    channels:
+      - "chat.freenode.net#kubevirt"
+    on_success: change
+    on_failure: always
 
 before_script:
 ## FIXME Workaround for https://github.com/kubernetes/kubernetes/issues/61058
