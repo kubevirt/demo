@@ -6,7 +6,7 @@ dist: xenial
 
 env:
   global:
-    - KUBEVIRT_VER=v0.8.0-alpha.2
+    - KUBEVIRT_VER=v0.8.0
   matrix:
     - CDIST=kubernetes CVER=1.10.7
     - CDIST=kubernetes CVER=1.11.2
