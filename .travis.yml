@@ -4,6 +4,11 @@ dist: xenial
 #services:
 #  - docker
 
+branches:
+  only:
+  - master
+  - /^v[0-9]/
+
 env:
   global:
     - KUBEVIRT_VER=v0.8.0
