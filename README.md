@@ -19,7 +19,7 @@ With minikube *RUNNING*, you can easily deploy KubeVirt:
 > If your host does not support hardware virtualization, then you will
 > need to enable software emulation using:
 > `kubectl create configmap -n kube-system kubevirt-config --from-literal
-> debug.allowEmulation=true`
+> debug.useEmulation=true`
 
 ```bash
 $ export VERSION=v0.8.0
