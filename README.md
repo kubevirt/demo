@@ -137,7 +137,7 @@ $ minikube start --vm-driver kvm2 --feature-gates=DevicePlugins=true --memory 40
 
 3. Install `kubectl` via a [package manager](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-native-package-management) or [download](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-curl) it
 
-### Running on `Origin`
+### Running on _Origin_ or `minishift`
 
 > `oc cluster` currently (v3.10) has a bug which requires and additional step.
 
