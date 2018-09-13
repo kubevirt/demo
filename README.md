@@ -6,20 +6,35 @@ This demo will deploy [KubeVirt](https://www.kubevirt.io) on an existing
 [minikube](https://github.com/kubernetes/minikube/) with Kubernetes 1.10 or
 later.
 
-Instructions for [openshift origin](#running-on-openshift-origin) are also provided
+Instructions for [openshift origin](#running-on-openshift-origin) are also provided below.
+
 
 ## Quickstart
 
 ### Deploy KubeVirt
 
-This demo assumes that `minikube` is up and running and `kubectl` available on your system. If not, then please take a look at the guide [below](#setting-up-minikube)
+This demo assumes that `minikube` (or `minishift`)and `kubectl` are available on your system.
+If it isn't take a look at the [small guide below](#setting-up-minikube).
 
-With minikube *RUNNING*, you can easily deploy KubeVirt:
+The first step is to start `minikube`:
 
-> If your host does not support hardware virtualization, then you will
-> need to enable software emulation using:
-> `kubectl create configmap -n kube-system kubevirt-config --from-literal
-> debug.allowEmulation=true`
+```bash
+$ minikube start --vm-driver kvm2 --feature-gates=DevicePlugins=true --memory 4096
+Starting local Kubernetes v1.10.0 cluster...
+Starting VM...
+Getting VM IP address...
+Moving files into cluster...
+Setting up certs...
+Connecting to cluster...
+Setting up kubeconfig...
+Starting cluster components...
+Kubectl is now configured to use the cluster.
+Loading cached images from config file.
+
+# Enable emulation mode as nested virtualization is often not available
+$ kubectl create configmap -n kube-system kubevirt-config --from-literal debug.allowEmulation=true
+```
+Once it is runing KubeVirt can be deployed:
 
 ```bash
 $ export VERSION=v0.8.0
