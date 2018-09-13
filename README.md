@@ -13,8 +13,9 @@ Instructions for [openshift origin](#running-on-openshift-origin) are also provi
 
 ### Deploy KubeVirt
 
-This demo assumes that `minikube` (or `minishift`)and `kubectl` are available on your system.
-If it isn't take a look at the [small guide below](#setting-up-minikube).
+This demo assumes that `minikube` (0.28+) (or `minishift`) is up and running and
+`kubectl` available on your system. If not, then please take a look at the guide
+[below](#setting-up-minikube).
 
 The first step is to start `minikube`:
 
@@ -32,8 +33,9 @@ Kubectl is now configured to use the cluster.
 Loading cached images from config file.
 
 # Enable emulation mode as nested virtualization is often not available
-$ kubectl create configmap -n kube-system kubevirt-config --from-literal debug.allowEmulation=true
+$ kubectl create configmap -n kube-system kubevirt-config --from-literal debug.useEmulation=true
 ```
+
 Once it is runing KubeVirt can be deployed:
 
 ```bash
