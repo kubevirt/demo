@@ -12,7 +12,7 @@ Instructions for [openshift origin](#running-on-openshift-origin) are also provi
 
 ### Deploy KubeVirt
 
-This demo assumes that `minikube` is up and running and `kubectl` available on your system. If not, then please take a look at the guide [below](#setting-up-minikube)
+This demo assumes that `minikube` is [configured and running as described below](#setting-up-minikube) and that `kubectl` is available on your system.
 
 With minikube *RUNNING*, you can easily deploy KubeVirt:
 
