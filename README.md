@@ -2,12 +2,10 @@
 
 # KubeVirt Demo
 
-This demo will deploy [KubeVirt](https://www.kubevirt.io) on an existing
-[minikube](https://github.com/kubernetes/minikube/) with Kubernetes 1.10 or
-later.
+This demo will deploy [KubeVirt](https://www.kubevirt.io) on
 
-Instructions for [openshift origin](#running-on-openshift-origin) are also provided below.
-
+- [minikube](#setting-up-minikube) with Kubernetes 1.10+
+- [minishift](#running-on-origin-or-minishift) with Origin 3.10+
 
 ## Quickstart
 
