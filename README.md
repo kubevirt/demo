@@ -2,7 +2,7 @@
 
 # KubeVirt Demo
 
-This demo will deploy [KubeVirt](https://www.kubevirt.io) on
+This demo will guide you through setting up [KubeVirt](https://www.kubevirt.io) on
 
 - [minikube](#setting-up-minikube) with Kubernetes 1.10+
 - [minishift](#running-on-origin-or-minishift) with Origin 3.10+
