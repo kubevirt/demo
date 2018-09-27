@@ -135,7 +135,7 @@ $ minikube start --vm-driver kvm2 --feature-gates=DevicePlugins=true --memory 40
 
 3. Install `kubectl` via a [package manager](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-native-package-management) or [download](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-curl) it
 
-### Running on _Origin_ or `minishift`
+### Running on _Origin_
 
 > `oc cluster` currently (v3.10) has a bug which requires and additional step.
 
@@ -148,18 +148,36 @@ $ minikube start --vm-driver kvm2 --feature-gates=DevicePlugins=true --memory 40
 
 ```bash
 oc cluster up --skip-registry-check --enable=router,sample-templates
+oc cluster down
+sed -i "/kind/ a\kubeletArguments:\n  feature-gates:\n  - DevicePlugins=true" $PWD/openshift.local.clusterup/node/node-config.yaml
+oc cluster up --skip-registry-check
 ```
 
-Apply the following workaround:
+### Running on `Minishift`
+
+Update the node-config.yaml
+
+```bash
+sudo sed -i "/kind/ a\kubeletArguments:\n  feature-gates:\n  - DevicePlugins=true" /var/lib/minishift/base/node/node-config.yaml
+```
+
+NOTE: For Minishift, updation of node-config.yaml file and device plugins fix should be done by logging into minishift vm via `minishift ssh`.
+
+
+### Fix Device Plugins
+
+Apply the following workaround for both Origin and Minishift:
 
 ```bash
 # Fix device plugins
 # Workaround for https://github.com/openshift/origin/pull/20351
-KUBELET_ROOTFS=$(sudo docker inspect $(sudo docker ps | grep kubelet | cut -d" " -f1) | jq -r ".[0].GraphDriver.Data.MergedDir" -)
+KUBELET_ROOTFS=$(docker inspect $(docker ps | grep kubelet | cut -d" " -f1) | grep MergedDir | cut -d":" -f2 | grep -E -o "/[a-zA-Z0-9\/]*")
 sudo mkdir -p /var/lib/kubelet/device-plugins $KUBELET_ROOTFS/var/lib/kubelet/device-plugins
 sudo mount -o bind $KUBELET_ROOTFS/var/lib/kubelet/device-plugins /var/lib/kubelet/device-plugins
 sudo ls /var/lib/kubelet/device-plugins
 ```
+
+### Additional Roles
 
 In addition to the deployment, grant the KubeVirt components some additional roles:
 
