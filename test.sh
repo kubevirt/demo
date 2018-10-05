@@ -30,7 +30,7 @@ k_wait_all_running() { bash ci/wait-pods-ok; }
   condTravisFold k_wait_all_running
 
   # Some additional time to schedule the VM
-  kubectl get vmis testvm -o yaml
+  kubectl describe vmis testvm
   timeout_while 1m "kubectl get vmis testvm -o jsonpath='{.status.phase}' | grep Running"
 
   set +xe
