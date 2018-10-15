@@ -24,6 +24,12 @@ spec:
               volumeName: cloudinitvolume
               disk:
                 bus: virtio
+          interfaces:
+          - bridge: {}
+            name: default
+      networks:
+      - name: default
+        pod: {}
       volumes:
         - name: registryvolume
           registryDisk:

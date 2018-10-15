@@ -5,7 +5,7 @@
 This demo will guide you through setting up [KubeVirt](https://www.kubevirt.io) on
 
 - [minikube](#setting-up-minikube) with Kubernetes 1.10+
-- [minishift](#running-on-origin-or-minishift) with Origin 3.10+
+- [minishift](#running-on-okd-or-minishift) with Okd 3.11+
 
 ## Quickstart
 
@@ -37,7 +37,7 @@ $ kubectl create configmap -n kube-system kubevirt-config --from-literal debug.u
 Once it is runing KubeVirt can be deployed:
 
 ```bash
-$ export VERSION=v0.8.0
+$ export VERSION=v0.9.1
 $ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt.yaml
 ```
 
@@ -135,9 +135,7 @@ $ minikube start --vm-driver kvm2 --feature-gates=DevicePlugins=true --memory 40
 
 3. Install `kubectl` via a [package manager](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-native-package-management) or [download](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-curl) it
 
-### Running on _Origin_ or `minishift`
-
-> `oc cluster` currently (v3.10) has a bug which requires and additional step.
+### Running on _Okd_ or `minishift`
 
 1. Get the `oc` tool
 
@@ -148,17 +146,6 @@ $ minikube start --vm-driver kvm2 --feature-gates=DevicePlugins=true --memory 40
 
 ```bash
 oc cluster up --skip-registry-check --enable=router,sample-templates
-```
-
-Apply the following workaround:
-
-```bash
-# Fix device plugins
-# Workaround for https://github.com/openshift/origin/pull/20351
-KUBELET_ROOTFS=$(sudo docker inspect $(sudo docker ps | grep kubelet | cut -d" " -f1) | jq -r ".[0].GraphDriver.Data.MergedDir" -)
-sudo mkdir -p /var/lib/kubelet/device-plugins $KUBELET_ROOTFS/var/lib/kubelet/device-plugins
-sudo mount -o bind $KUBELET_ROOTFS/var/lib/kubelet/device-plugins /var/lib/kubelet/device-plugins
-sudo ls /var/lib/kubelet/device-plugins
 ```
 
 In addition to the deployment, grant the KubeVirt components some additional roles:
