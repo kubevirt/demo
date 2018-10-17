@@ -5,7 +5,7 @@
 This demo will guide you through setting up [KubeVirt](https://www.kubevirt.io) on
 
 - [minikube](#setting-up-minikube) with Kubernetes 1.10+
-- [minishift](#running-on-okd-or-minishift) with Okd 3.11+
+- [minishift](#running-on-okd-or-minishift) with OKD 3.11+
 
 ## Quickstart
 
@@ -135,7 +135,7 @@ $ minikube start --vm-driver kvm2 --feature-gates=DevicePlugins=true --memory 40
 
 3. Install `kubectl` via a [package manager](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-native-package-management) or [download](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-curl) it
 
-### Running on _Okd_ or `minishift`
+### Running on _OKD_ or `minishift`
 
 1. Get the `oc` tool
 
