@@ -10,7 +10,6 @@ spec:
   template:
     metadata:
       labels: 
-        guest: testvm
         kubevirt.io/size: small
     spec:
       domain:
@@ -26,7 +25,9 @@ spec:
                 bus: virtio
           interfaces:
           - bridge: {}
-            name: default
+        resources:
+          requests:
+            memory: 64M
       networks:
       - name: default
         pod: {}
@@ -37,17 +38,4 @@ spec:
         - name: cloudinitvolume
           cloudInitNoCloud:
             userDataBase64: SGkuXG4= 
----
-apiVersion: kubevirt.io/v1alpha2
-kind: VirtualMachineInstancePreset
-metadata:
-  name: small
-spec:
-  selector:
-    matchLabels:
-      kubevirt.io/size: small
-  domain:
-    resources:
-      requests:
-        memory: 64M
     devices: {}

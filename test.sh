@@ -33,8 +33,6 @@ k_wait_all_running() { bash ci/wait-pods-ok; }
   kubectl get vmis testvm -o yaml
   timeout_while 1m "kubectl get vmis testvm -o jsonpath='{.status.phase}' | grep Running"
 
-  kubectl get vmis testvm -o yaml | grep 'presets-applied'
-
   set +xe
 }
 
