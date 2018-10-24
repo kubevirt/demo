@@ -24,7 +24,8 @@ spec:
               disk:
                 bus: virtio
           interfaces:
-          - bridge: {}
+          - name: default
+            bridge: {}
         resources:
           requests:
             memory: 64M
