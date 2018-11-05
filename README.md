@@ -30,7 +30,8 @@ Starting cluster components...
 Kubectl is now configured to use the cluster.
 Loading cached images from config file.
 
-# Enable emulation mode as nested virtualization is often not available
+# Enable nesting as described [below](#setting-up-minikube)
+# OR Enable emulation mode when nested virtualization is not available or you don't want to use it
 $ kubectl create configmap -n kube-system kubevirt-config --from-literal debug.useEmulation=true
 ```
 
@@ -103,31 +104,16 @@ Now that KubeVirt is up an running, you can take a look at the [user guide](http
 
 ## Appendix
 
-### Setting up `nested virtualization`
-
-1. Enable it:
-
-```bash
-$ sudo sh -c "echo options kvm-intel nested=1 >> /etc/modprobe.d/kvm-intel.conf"
-$ sudo modprobe -r kvm_intel
-$ sudo modprobe kvm_intel
-```
-
-2. Verify that nested virtualization is enabled:
-
-```bash
-$ cat /sys/module/kvm_intel/parameters/nested
-Y
-```
-
 ### Setting up `Minikube`
 
-1. If not installed, install minikube as described [here](https://github.com/kubernetes/minikube/):
+1. (Optional) Minikube has support for nested virtualization, it can be enabled as described [here](https://docs.fedoraproject.org/en-US/quick-docs/using-nested-virtualization-in-kvm/).
+
+2. If not installed, install minikube as described [here](https://github.com/kubernetes/minikube/):
 
    1. Install the [kvm2 driver](https://github.com/kubernetes/minikube/blob/master/docs/drivers.md#kvm2-driver)
    2. Download the [`minikube` binary](https://github.com/kubernetes/minikube/releases)
 
-2. Launch minikube with the desired memory
+3. Launch minikube with the desired memory
 
 ```bash
 $ minikube start --vm-driver kvm2 --feature-gates=DevicePlugins=true --memory 4096
