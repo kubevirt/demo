@@ -4,9 +4,6 @@ metadata:
   name: testvm
 spec:
   running: false
-  selector:
-    matchLabels:
-      guest: testvm
   template:
     metadata:
       labels: 
@@ -39,4 +36,3 @@ spec:
         - name: cloudinitvolume
           cloudInitNoCloud:
             userDataBase64: SGkuXG4= 
-    devices: {}
