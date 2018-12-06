@@ -8,6 +8,7 @@ spec:
     metadata:
       labels: 
         kubevirt.io/size: small
+        kubevirt.io/domain: testvm
     spec:
       domain:
         devices:
