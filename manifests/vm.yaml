@@ -4,45 +4,36 @@ metadata:
   name: testvm
 spec:
   running: false
-  selector:
-    matchLabels:
-      guest: testvm
   template:
     metadata:
       labels: 
-        guest: testvm
         kubevirt.io/size: small
         kubevirt.io/domain: testvm
     spec:
       domain:
         devices:
           disks:
-            - name: registrydisk
-              volumeName: registryvolume
+            - name: containerdisk
+              volumeName: containervolume
               disk:
                 bus: virtio
             - name: cloudinitdisk
               volumeName: cloudinitvolume
               disk:
                 bus: virtio
+          interfaces:
+          - name: default
+            bridge: {}
+        resources:
+          requests:
+            memory: 64M
+      networks:
+      - name: default
+        pod: {}
       volumes:
-        - name: registryvolume
-          registryDisk:
+        - name: containervolume
+          containerDisk:
             image: kubevirt/cirros-registry-disk-demo
         - name: cloudinitvolume
           cloudInitNoCloud:
             userDataBase64: SGkuXG4= 
----
-apiVersion: kubevirt.io/v1alpha2
-kind: VirtualMachineInstancePreset
-metadata:
-  name: small
-spec:
-  selector:
-    matchLabels:
-      kubevirt.io/size: small
-  domain:
-    resources:
-      requests:
-        memory: 64M
-    devices: {}
