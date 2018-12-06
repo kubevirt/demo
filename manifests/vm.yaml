@@ -12,8 +12,8 @@ spec:
       domain:
         devices:
           disks:
-            - name: registrydisk
-              volumeName: registryvolume
+            - name: containerdisk
+              volumeName: containervolume
               disk:
                 bus: virtio
             - name: cloudinitdisk
@@ -30,8 +30,8 @@ spec:
       - name: default
         pod: {}
       volumes:
-        - name: registryvolume
-          registryDisk:
+        - name: containervolume
+          containerDisk:
             image: kubevirt/cirros-registry-disk-demo
         - name: cloudinitvolume
           cloudInitNoCloud:
