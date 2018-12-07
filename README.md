@@ -35,6 +35,8 @@ Loading cached images from config file.
 $ kubectl create configmap -n kube-system kubevirt-config --from-literal debug.useEmulation=true
 ```
 
+> **Note:** When deploying KubeVirt on `minishift`, you will need [to install openshift-client-tools and add the following SCCs](#running-on-okd-or-minishift) prior kubevirt.yaml deployment.
+
 Once it is runing KubeVirt can be deployed:
 
 ```bash
