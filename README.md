@@ -32,7 +32,8 @@ Loading cached images from config file.
 
 # Enable nesting as described [below](#setting-up-minikube)
 # OR Enable emulation mode when nested virtualization is not available or you don't want to use it
-$ kubectl create configmap -n kube-system kubevirt-config --from-literal debug.useEmulation=true
+$ kubectl create namespace kubevirt
+$ kubectl create configmap -n kubevirt kubevirt-config --from-literal debug.useEmulation=true
 ```
 
 > **Note:** When deploying KubeVirt on `minishift`, you will need [to install openshift-client-tools and add the following SCCs](#running-on-okd-or-minishift) prior kubevirt.yaml deployment.
@@ -40,8 +41,9 @@ $ kubectl create configmap -n kube-system kubevirt-config --from-literal debug.u
 Once it is runing KubeVirt can be deployed:
 
 ```bash
-$ export VERSION=v0.11.0
-$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt.yaml
+$ export VERSION=v0.12.0
+$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt-operator.yaml
+$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt-cr.yaml
 ```
 
 > The initial deployment can take a long time, because a number of
@@ -139,7 +141,7 @@ oc cluster up --skip-registry-check --enable=router,sample-templates
 In addition to the deployment, grant the KubeVirt components some additional roles:
 
 ```bash
-oc adm policy add-scc-to-user privileged -n kube-system -z kubevirt-privileged
-oc adm policy add-scc-to-user privileged -n kube-system -z kubevirt-controller
-oc adm policy add-scc-to-user privileged -n kube-system -z kubevirt-apiserver
+oc adm policy add-scc-to-user privileged -n kubevirt -z kubevirt-privileged
+oc adm policy add-scc-to-user privileged -n kubevirt -z kubevirt-controller
+oc adm policy add-scc-to-user privileged -n kubevirt -z kubevirt-apiserver
 ```
