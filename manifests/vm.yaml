@@ -1,4 +1,4 @@
-apiVersion: kubevirt.io/v1alpha2
+apiVersion: kubevirt.io/v1alpha3
 kind: VirtualMachine
 metadata:
   name: testvm
@@ -13,12 +13,10 @@ spec:
       domain:
         devices:
           disks:
-            - name: containerdisk
-              volumeName: containervolume
+            - name: containervolume
               disk:
                 bus: virtio
-            - name: cloudinitdisk
-              volumeName: cloudinitvolume
+            - name: cloudinitvolume
               disk:
                 bus: virtio
           interfaces:
