@@ -41,7 +41,7 @@ $ kubectl create configmap -n kubevirt kubevirt-config --from-literal debug.useE
 Once it is runing KubeVirt can be deployed:
 
 ```bash
-$ export VERSION=v0.13.1
+$ export VERSION=v0.14.0
 $ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt.yaml
 ```
 

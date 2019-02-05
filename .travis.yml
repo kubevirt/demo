@@ -17,6 +17,11 @@ jobs:
     - name: "minishift (latest okd)"
       env: CPLATFORM=minishift
 
+    - name: "minikube (operator)"
+      env: USE_OPERATOR=true
+    - name: "minishift (operator)"
+      env: CPLATFORM=minishift USE_OPERATOR=true
+
 cache:
   directories:
   - cache
@@ -40,4 +45,4 @@ before_script:
 - bash -x ci/deploy-kubevirt $CPLATFORM
 
 script:
-- timeout 5m bash -x test.sh
+- bash -x test.sh
