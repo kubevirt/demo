@@ -1,4 +1,4 @@
-apiVersion: kubevirt.io/v1alpha2
+apiVersion: kubevirt.io/v1alpha3
 kind: VirtualMachine
 metadata:
   name: testvm
@@ -13,14 +13,12 @@ spec:
       domain:
         devices:
           disks:
-            - name: containerdisk
-              volumeName: containervolume
-              disk:
-                bus: virtio
-            - name: cloudinitdisk
-              volumeName: cloudinitvolume
-              disk:
-                bus: virtio
+          - disk:
+              bus: virtio
+            name: containerdisk
+          - disk:
+              bus: virtio
+            name: cloudinitdisk
           interfaces:
           - name: default
             bridge: {}
@@ -31,9 +29,9 @@ spec:
       - name: default
         pod: {}
       volumes:
-        - name: containervolume
+        - name: containerdisk
           containerDisk:
             image: kubevirt/cirros-registry-disk-demo
-        - name: cloudinitvolume
+        - name: cloudinitdisk
           cloudInitNoCloud:
             userDataBase64: SGkuXG4= 
