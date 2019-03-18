@@ -10,12 +10,13 @@ jobs:
   include:
     - stage: Tests
       name: "Default (minikube with latest k8s)"
+      env: USE_OPERATOR=true
 
     - name: "oc cluster (latest okd)"
-      env: CPLATFORM=oc_cluster
+      env: CPLATFORM=oc_cluster USE_OPERATOR=true
 
     - name: "minishift (latest okd)"
-      env: CPLATFORM=minishift
+      env: CPLATFORM=minishift USE_OPERATOR=true
 
 cache:
   directories:
