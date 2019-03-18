@@ -18,8 +18,6 @@ timeout_while() { timeout $1 sh -c "while true; do $2 && break || : ; sleep 1 ; 
 k_wait_all_running() { bash ci/wait-pods-ok; }
 
 {
-  set -xe
-
   kubectl apply -f manifests/vm.yaml
 
   kubectl get vm testvm
@@ -32,8 +30,11 @@ k_wait_all_running() { bash ci/wait-pods-ok; }
   # Some additional time to schedule the VM
   kubectl describe vmis testvm
   timeout_while 1m "kubectl get vmis testvm -o jsonpath='{.status.phase}' | grep Running"
-
-  set +xe
+} || {
+  echo "Something went rong, gathering debug infos"
+  kubectl get --all-namespaces events
+  kubectl describe vmis
+  exit 1
 }
 
 PASS

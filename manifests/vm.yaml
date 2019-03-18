@@ -15,10 +15,10 @@ spec:
           disks:
           - disk:
               bus: virtio
-            name: containerdisk
+            name: rootfs
           - disk:
               bus: virtio
-            name: cloudinitdisk
+            name: cloudinit
           interfaces:
           - name: default
             bridge: {}
@@ -29,9 +29,9 @@ spec:
       - name: default
         pod: {}
       volumes:
-        - name: containerdisk
+        - name: rootfs
           containerDisk:
             image: kubevirt/cirros-registry-disk-demo
-        - name: cloudinitdisk
+        - name: cloudinit
           cloudInitNoCloud:
             userDataBase64: SGkuXG4= 
