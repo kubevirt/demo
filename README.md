@@ -18,17 +18,26 @@ your system. If not, then please take a look at the guide [below](#setting-up-mi
 The first step is to start `minikube`:
 
 ```bash
-$ minikube start --vm-driver kvm2 --feature-gates=DevicePlugins=true --memory 4096
-Starting local Kubernetes v1.10.0 cluster...
+$ minikube config set vm-driver kvm2
+$ minikube start --memory 4096
+$ minikube start
+Starting local Kubernetes v1.13.2 cluster...
 Starting VM...
 Getting VM IP address...
 Moving files into cluster...
 Setting up certs...
 Connecting to cluster...
 Setting up kubeconfig...
+Stopping extra container runtimes...
 Starting cluster components...
+Verifying kubelet health ...
+Verifying apiserver health ...
 Kubectl is now configured to use the cluster.
 Loading cached images from config file.
+
+
+Everything looks great. Please enjoy minikube!
+$
 
 # Enable nesting as described [below](#setting-up-minikube)
 # OR Enable emulation mode when nested virtualization is not available or you don't want to use it
@@ -40,13 +49,17 @@ $ kubectl create configmap -n kube-system kubevirt-config --from-literal debug.u
 Once it is runing KubeVirt can be deployed:
 
 ```bash
-$ export VERSION=v0.11.0
-$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt.yaml
+$ export VERSION=v0.15.0
+$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt-operator.yaml
+$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$VERION/kubevirt-cr.yaml
+
 ```
 
 > The initial deployment can take a long time, because a number of
 > containers have to be pulled from the internet. Use
-> `watch kubectl get --all-namespaces pods` to monitor the progress.
+> `watch kubectl get --all-namespaces pods` to monitor the progress or
+> wait for the operator to complete the deployment using
+> `kubectl wait --timeout=180s --for=condition=Ready -n kubevirt kv/kubevirt`
 
 
 ### Install virtctl
@@ -139,7 +152,5 @@ oc cluster up --skip-registry-check --enable=router,sample-templates
 In addition to the deployment, grant the KubeVirt components some additional roles:
 
 ```bash
-oc adm policy add-scc-to-user privileged -n kube-system -z kubevirt-privileged
-oc adm policy add-scc-to-user privileged -n kube-system -z kubevirt-controller
-oc adm policy add-scc-to-user privileged -n kube-system -z kubevirt-apiserver
+oc adm policy add-scc-to-user privileged -n kubevirt -z kubevirt-operator
 ```
