@@ -41,6 +41,7 @@ $
 
 # Enable nesting as described [below](#setting-up-minikube)
 # OR Enable emulation mode when nested virtualization is not available or you don't want to use it
+$ kubectl create namespace kubevirt
 $ kubectl create configmap -n kube-system kubevirt-config --from-literal debug.useEmulation=true
 ```
 
