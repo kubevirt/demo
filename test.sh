@@ -31,7 +31,7 @@ k_wait_all_running() { bash ci/wait-pods-ok; }
   kubectl describe vmis testvm
   timeout_while 1m "kubectl get vmis testvm -o jsonpath='{.status.phase}' | grep Running"
 } || {
-  echo "Something went rong, gathering debug infos"
+  echo "Something went wrong, gathering debug infos"
   kubectl get --all-namespaces events
   kubectl describe vmis
   exit 1
