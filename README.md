@@ -52,7 +52,7 @@ Once it is runing KubeVirt can be deployed:
 ```bash
 $ export VERSION=v0.15.0
 $ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt-operator.yaml
-$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$VERION/kubevirt-cr.yaml
+$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt-cr.yaml
 
 ```
 
