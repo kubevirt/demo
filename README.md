@@ -42,7 +42,7 @@ $
 # Enable nesting as described [below](#setting-up-minikube)
 # OR Enable emulation mode when nested virtualization is not available or you don't want to use it
 $ kubectl create namespace kubevirt
-$ kubectl create configmap -n kube-system kubevirt-config --from-literal debug.useEmulation=true
+$ kubectl create configmap -n kubevirt kubevirt-config --from-literal debug.useEmulation=true
 ```
 
 > **Note:** When deploying KubeVirt on `minishift`, you will need [to install openshift-client-tools and add the following SCCs](#running-on-okd-or-minishift) prior kubevirt.yaml deployment.
