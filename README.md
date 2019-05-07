@@ -4,14 +4,14 @@
 
 This demo will guide you through setting up [KubeVirt](https://www.kubevirt.io) on
 
-- [minikube](#setting-up-minikube) with Kubernetes 1.10+
-- [minishift](#running-on-okd-or-minishift) with OKD 3.11+
+- [minikube](#setting-up-minikube) with Kubernetes 1.12+
+- [minishift](#running-on-okd-or-minishift) with OKD 3.12+
 
 ## Quickstart
 
 ### Deploy KubeVirt
 
-This demo assumes that `minikube` (0.28+) (or `minishift`) is [configured and
+This demo assumes that `minikube` (0.33+) (or `minishift`) is [configured and
 running as described below](#setting-up-minikube) and that `kubectl` available on
 your system. If not, then please take a look at the guide [below](#setting-up-minikube).
 
@@ -20,48 +20,59 @@ The first step is to start `minikube`:
 ```bash
 $ minikube config set vm-driver kvm2
 $ minikube start --memory 4096
-$ minikube start
-Starting local Kubernetes v1.13.2 cluster...
-Starting VM...
-Getting VM IP address...
-Moving files into cluster...
-Setting up certs...
-Connecting to cluster...
-Setting up kubeconfig...
-Stopping extra container runtimes...
-Starting cluster components...
-Verifying kubelet health ...
-Verifying apiserver health ...
-Kubectl is now configured to use the cluster.
-Loading cached images from config file.
-
-
-Everything looks great. Please enjoy minikube!
+😄  minikube v1.0.1 on linux (amd64)
+💿  Downloading Minikube ISO ...
+ 142.88 MB / 142.88 MB [============================================] 100.00% 0s
+🤹  Downloading Kubernetes v1.14.1 images in the background ...
+🔥  Creating kvm2 VM (CPUs=2, Memory=2048MB, Disk=20000MB) ...
+📶  "minikube" IP address is 192.168.39.47
+🐳  Configuring Docker as the container runtime ...
+🐳  Version of container runtime is 18.06.3-ce
+⌛  Waiting for image downloads to complete ...
+✨  Preparing Kubernetes environment ...
+💾  Downloading kubelet v1.14.1
+💾  Downloading kubeadm v1.14.1
+🚜  Pulling images required by Kubernetes v1.14.1 ...
+🚀  Launching Kubernetes v1.14.1 using kubeadm ...
+⌛  Waiting for pods: apiserver proxy etcd scheduler controller dns
+🔑  Configuring cluster permissions ...
+🤔  Verifying component health .....
+💗  kubectl is now configured to use "minikube"
+🏄  Done! Thank you for using minikube!
 $
-
-# Enable nesting as described [below](#setting-up-minikube)
-# OR Enable emulation mode when nested virtualization is not available or you don't want to use it
-$ kubectl create namespace kubevirt
-$ kubectl create configmap -n kubevirt kubevirt-config --from-literal debug.useEmulation=true
 ```
+
+Now it's time to deploy KubeVirt:
 
 > **Note:** When deploying KubeVirt on `minishift`, you will need [to install openshift-client-tools and add the following SCCs](#running-on-okd-or-minishift) prior kubevirt.yaml deployment.
 
-Once it is runing KubeVirt can be deployed:
-
 ```bash
-$ export VERSION=v0.15.0
-$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt-operator.yaml
-$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$VERSION/kubevirt-cr.yaml
+# Either nesting as described [below](#setting-up-minikube) will be used, or we configure emulation if
+# no nesting is available:
+$ kubectl create namespace kubevirt
 
+$ minikube ssh -- test -e /dev/kvm \
+  && echo "Nesting available" \
+  || (kubectl create configmap -n kubevirt kubevirt-config --from-literal debug.useEmulation=true ; echo "No nesting, configuring emulation" )
+
+$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/v0.17.0/kubevirt-operator.yaml
+…
+deployment.apps/virt-operator created
+
+$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/v0.17.0/kubevirt-cr.yaml
+kubevirt.kubevirt.io/kubevirt created
 ```
 
-> The initial deployment can take a long time, because a number of
-> containers have to be pulled from the internet. Use
-> `watch kubectl get --all-namespaces pods` to monitor the progress or
-> wait for the operator to complete the deployment using
-> `kubectl wait --timeout=180s --for=condition=Ready -n kubevirt kv/kubevirt`
+The initial deployment can take a long time, because a number of pods have to be pulled from the internet.
+We'll watch the operator status to determine when the deployment is completed:
 
+```bash
+$ kubectl wait --timeout=180s --for=condition=Ready -n kubevirt kv/kubevirt
+kubevirt.kubevirt.io/kubevirt condition met
+$
+```
+
+Congratulations, KubeVirt was successfully deployed.
 
 ### Install virtctl
 
@@ -69,7 +80,7 @@ An additional binary is provided to get quick access to the serial and graphical
 The tool is called `virtctl` and can be retrieved from the release page of KubeVirt:
 
 ```bash
-$ curl -L -o virtctl https://github.com/kubevirt/kubevirt/releases/download/$VERSION/virtctl-$VERSION-linux-amd64
+$ curl -L -o virtctl https://github.com/kubevirt/kubevirt/releases/download/v0.17.0/virtctl-v0.17.0-linux-amd64
 $ chmod +x virtctl
 ```
 
