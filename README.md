@@ -4,16 +4,16 @@
 
 This demo will guide you through setting up [KubeVirt](https://www.kubevirt.io) on
 
-- [minikube](#setting-up-minikube) with Kubernetes 1.12+
+- [minikube](#setting-up-minikube) 0.33+ with Kubernetes 1.12+
 - [minishift](#running-on-okd-or-minishift) with OKD 3.12+
 
 ## Quickstart
 
 ### Deploy KubeVirt
 
-This demo assumes that `minikube` (0.33+) (or `minishift`) is [configured and
-running as described below](#setting-up-minikube) and that `kubectl` available on
-your system. If not, then please take a look at the guide [below](#setting-up-minikube).
+This demo assumes that `minikube` or `minishift` is [configured and running as described
+below](#setting-up-minikube) and that `kubectl` available on your system. If not, then
+please take a look at the guide [below](#setting-up-minikube).
 
 The first step is to start `minikube`:
 
