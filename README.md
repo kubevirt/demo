@@ -41,9 +41,9 @@ $ minikube start --memory 4096
 🏄  Done! Thank you for using minikube!
 ```
 
-Now it's time to deploy KubeVirt:
-
-> **Note:** When deploying KubeVirt on `minishift`, you will need [to install openshift-client-tools and add the following SCCs](#running-on-okd-or-minishift) prior kubevirt.yaml deployment.
+Before we can deploy KubeVirt we create a small config, to adjust KubeVirt to your
+environment. Specifically enabling software emulation for your VMs in case that no
+hardware virtualization support is present.
 
 ```bash
 $ kubectl create namespace kubevirt
@@ -52,7 +52,13 @@ $ kubectl create namespace kubevirt
 # no nesting is available:
 $ minikube ssh -- test -e /dev/kvm \
   || kubectl create configmap -n kubevirt kubevirt-config --from-literal debug.useEmulation=true
+```
 
+Now you are finally ready to deploy KubeVirt using our operator (comparable to an installer):
+
+> **Note:** When deploying KubeVirt on `minishift`, you will need [to install openshift-client-tools and add the following SCCs](#running-on-okd-or-minishift) prior kubevirt.yaml deployment.
+
+```bash
 $ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/v0.17.0/kubevirt-operator.yaml
 …
 deployment.apps/virt-operator created
