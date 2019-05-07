@@ -10,26 +10,18 @@ jobs:
   include:
     - stage: Tests
       name: "Default (minikube with latest k8s)"
-      env: USE_OPERATOR=true
 
     - name: "oc cluster (latest okd)"
-      env: CPLATFORM=oc_cluster USE_OPERATOR=true
+      env: CPLATFORM=oc_cluster
 
     - name: "minishift (latest okd)"
-      env: CPLATFORM=minishift USE_OPERATOR=true
+      env: CPLATFORM=minishift
 
 cache:
   directories:
   - cache
   - ~/.minishift/cache
   - ~/.minikube/cache
-
-notifications:
-  irc:
-    channels:
-      - "chat.freenode.net#kubevirt"
-    on_success: change
-    on_failure: always
 
 before_script:
 ## FIXME Workaround for https://github.com/kubernetes/kubernetes/issues/61058
