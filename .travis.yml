@@ -23,13 +23,6 @@ cache:
   - ~/.minishift/cache
   - ~/.minikube/cache
 
-notifications:
-  irc:
-    channels:
-      - "chat.freenode.net#kubevirt"
-    on_success: change
-    on_failure: always
-
 before_script:
 ## FIXME Workaround for https://github.com/kubernetes/kubernetes/issues/61058
 ### And https://github.com/LiliC/travis-minikube/blob/e0f26f7b388057f51a0e2558afd5f990e07b6c49/.travis.yml#L11
