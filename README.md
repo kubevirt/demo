@@ -81,7 +81,7 @@ $ curl -L -o virtctl https://github.com/kubevirt/kubevirt/releases/download/v0.1
 $ chmod +x virtctl
 ```
 
-### Deploy a VirtualMachine
+### Starting and stopping a VirtualMachine
 
 Once you deployed KubeVirt you are ready to launch a VM:
 
@@ -90,33 +90,31 @@ Once you deployed KubeVirt you are ready to launch a VM:
 $ kubectl apply -f https://raw.githubusercontent.com/kubevirt/demo/master/manifests/vm.yaml
 
 # After deployment you can manage VMs using the usual verbs:
-$ kubectl get vms
-$ kubectl get vms -o yaml testvm
+$ kubectl describe vm testvm
 
-# To start a VM you can use
+# To start a VM you can use, this will create a VM instance (VMI)
 $ ./virtctl start testvm
 
-# Afterwards you can inspect the instances
-$ kubectl get vmis
-$ kubectl get vmis -o yaml testvm
+# The interested reader can now optionally inspect the instance
+$ kubectl describe vmi testvm
 
-# To shut it down again
+# To shut the VM down again:
 $ ./virtctl stop testvm
 
 # To delete
-$ kubectl delete vms testvm
+$ kubectl delete vm testvm
 # To create your own
 $ kubectl apply -f $YOUR_VM_SPEC
 ```
 
-### Accessing VMs (serial console & vnc)
+### Accessing VMs (serial console & VNC)
 
 ```
 # Connect to the serial console
 $ ./virtctl console testvm
 
 # Connect to the graphical display
-# It Requires remote-viewer from the virt-viewer package.
+# This requires remote-viewer from the virt-viewer package and a graphical desktop from where oyu run virtctl
 $ ./virtctl vnc testvm
 ```
 
