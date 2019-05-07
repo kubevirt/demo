@@ -47,13 +47,12 @@ Now it's time to deploy KubeVirt:
 > **Note:** When deploying KubeVirt on `minishift`, you will need [to install openshift-client-tools and add the following SCCs](#running-on-okd-or-minishift) prior kubevirt.yaml deployment.
 
 ```bash
-# Either nesting as described [below](#setting-up-minikube) will be used, or we configure emulation if
-# no nesting is available:
 $ kubectl create namespace kubevirt
 
+# Either nesting as described [below](#setting-up-minikube) will be used, or we configure emulation if
+# no nesting is available:
 $ minikube ssh -- test -e /dev/kvm \
-  && echo "Nesting available" \
-  || (kubectl create configmap -n kubevirt kubevirt-config --from-literal debug.useEmulation=true ; echo "No nesting, configuring emulation" )
+  || kubectl create configmap -n kubevirt kubevirt-config --from-literal debug.useEmulation=true
 
 $ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/v0.17.0/kubevirt-operator.yaml
 …
