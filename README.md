@@ -39,7 +39,6 @@ $ minikube start --memory 4096
 🤔  Verifying component health .....
 💗  kubectl is now configured to use "minikube"
 🏄  Done! Thank you for using minikube!
-$
 ```
 
 Now it's time to deploy KubeVirt:
@@ -68,7 +67,6 @@ We'll watch the operator status to determine when the deployment is completed:
 ```bash
 $ kubectl wait --timeout=180s --for=condition=Ready -n kubevirt kv/kubevirt
 kubevirt.kubevirt.io/kubevirt condition met
-$
 ```
 
 Congratulations, KubeVirt was successfully deployed.
