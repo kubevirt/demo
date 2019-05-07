@@ -56,8 +56,6 @@ $ minikube ssh -- test -e /dev/kvm \
 
 Now you are finally ready to deploy KubeVirt using our operator (comparable to an installer):
 
-> **Note:** When deploying KubeVirt on `minishift`, you will need [to install openshift-client-tools and add the following SCCs](#running-on-okd-or-minishift) prior kubevirt.yaml deployment.
-
 ```bash
 $ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/v0.17.0/kubevirt-operator.yaml
 …
@@ -151,6 +149,9 @@ $ minikube start --vm-driver kvm2 --feature-gates=DevicePlugins=true --memory 40
 
 ### Running on _OKD_ or `minishift`
 
+OKD is just another Kubernetes distribution, and you can also use `kubectl` to interact with such a cluster.
+However, the `oc` tool is part of OKD and provides additional commands for managing your cluster.
+
 1. Get the `oc` tool
 
   1. Download the _openshift-client-tools_ tarball from [here](https://github.com/openshift/origin/releases):
@@ -160,10 +161,4 @@ $ minikube start --vm-driver kvm2 --feature-gates=DevicePlugins=true --memory 40
 
 ```bash
 oc cluster up --skip-registry-check --enable=router,sample-templates
-```
-
-In addition to the deployment, grant the KubeVirt components some additional roles:
-
-```bash
-oc adm policy add-scc-to-user privileged -n kubevirt -z kubevirt-operator
 ```
