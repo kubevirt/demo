@@ -13,7 +13,6 @@ condTravisFold() {
   eval "$@"
   [[ -n "$TRAVIS" ]] && echo "travis_fold:end:SCRIPT folding ends" || :
 }
-
 timeout_while() { timeout $1 sh -c "while true; do $2 && break || : ; sleep 1 ; done" ; }
 k_wait_all_running() { bash ci/wait-pods-ok; }
 
