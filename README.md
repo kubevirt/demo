@@ -57,11 +57,11 @@ $ minikube ssh -- test -e /dev/kvm \
 Now you are finally ready to deploy KubeVirt using our operator (comparable to an installer):
 
 ```bash
-$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/v0.17.0/kubevirt-operator.yaml
+$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/v0.18.1/kubevirt-operator.yaml
 …
 deployment.apps/virt-operator created
 
-$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/v0.17.0/kubevirt-cr.yaml
+$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/v0.18.1/kubevirt-cr.yaml
 kubevirt.kubevirt.io/kubevirt created
 ```
 
@@ -81,9 +81,11 @@ An additional binary is provided to get quick access to the serial and graphical
 The tool is called `virtctl` and can be retrieved from the release page of KubeVirt:
 
 ```bash
-$ curl -L -o virtctl https://github.com/kubevirt/kubevirt/releases/download/v0.17.0/virtctl-v0.17.0-linux-amd64
+$ curl -L -o virtctl https://github.com/kubevirt/kubevirt/releases/download/v0.18.1/virtctl-v0.18.1-linux-amd64
 $ chmod +x virtctl
 ```
+
+#### Installing with krew
 
 If you installed [krew](https://krew.dev), you can install virtctl as a kubectl plugin:
 
@@ -95,6 +97,8 @@ $ kubectl krew install virt
 
 Once you deployed KubeVirt you are ready to launch a VM:
 
+*if `virtctl` is installed via krew, please use `kubectl virt ...` instead of `./virtctl ...`*
+
 ```bash
 # Creating a virtual machine
 $ kubectl apply -f https://raw.githubusercontent.com/kubevirt/demo/master/manifests/vm.yaml
@@ -104,16 +108,12 @@ $ kubectl describe vm testvm
 
 # To start a VM you can use, this will create a VM instance (VMI)
 $ ./virtctl start testvm
-# OR with krew/virt installed
-$ kubectl virt start testvm
 
 # The interested reader can now optionally inspect the instance
 $ kubectl describe vmi testvm
 
 # To shut the VM down again:
 $ ./virtctl stop testvm
-# OR with krew/virt installed
-$ kubectl virt stop testvm
 
 # To delete
 $ kubectl delete vm testvm
@@ -123,17 +123,15 @@ $ kubectl apply -f $YOUR_VM_SPEC
 
 ### Accessing VMs (serial console & VNC)
 
-```
+*if `virtctl` is installed via krew, please use `kubectl virt ...` instead of `./virtctl ...`*
+
+```bash
 # Connect to the serial console
 $ ./virtctl console testvm
-# OR with krew/virt installed
-$ kubectl virt console testvm
 
 # Connect to the graphical display
 # This requires remote-viewer from the virt-viewer package and a graphical desktop from where oyu run virtctl
 $ ./virtctl vnc testvm
-# OR with krew/virt installed
-$ kubectl virt vnc testvm
 ```
 
 ## Next steps
