@@ -85,6 +85,12 @@ $ curl -L -o virtctl https://github.com/kubevirt/kubevirt/releases/download/v0.1
 $ chmod +x virtctl
 ```
 
+If you installed [krew](https://krew.dev), you can install virtctl as a kubectl plugin:
+
+```bash
+$ kubectl krew install virt
+```
+
 ### Starting and stopping a VirtualMachine
 
 Once you deployed KubeVirt you are ready to launch a VM:
@@ -98,12 +104,16 @@ $ kubectl describe vm testvm
 
 # To start a VM you can use, this will create a VM instance (VMI)
 $ ./virtctl start testvm
+# OR with krew/virt installed
+$ kubectl virt start testvm
 
 # The interested reader can now optionally inspect the instance
 $ kubectl describe vmi testvm
 
 # To shut the VM down again:
 $ ./virtctl stop testvm
+# OR with krew/virt installed
+$ kubectl virt stop testvm
 
 # To delete
 $ kubectl delete vm testvm
@@ -116,10 +126,14 @@ $ kubectl apply -f $YOUR_VM_SPEC
 ```
 # Connect to the serial console
 $ ./virtctl console testvm
+# OR with krew/virt installed
+$ kubectl virt console testvm
 
 # Connect to the graphical display
 # This requires remote-viewer from the virt-viewer package and a graphical desktop from where oyu run virtctl
 $ ./virtctl vnc testvm
+# OR with krew/virt installed
+$ kubectl virt vnc testvm
 ```
 
 ## Next steps
