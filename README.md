@@ -5,6 +5,7 @@
 This demo will guide you through setting up [KubeVirt](https://www.kubevirt.io) on
 
 - [minikube](#setting-up-minikube) 0.33+ with Kubernetes 1.12+
+- [kind](#setting-up-kind] 0.4+
 - [minishift](#running-on-okd-or-minishift) with OKD 3.12+
 
 ## Quickstart
@@ -158,6 +159,26 @@ $ minikube start --vm-driver kvm2 --feature-gates=DevicePlugins=true --memory 40
 ```
 
 3. Install `kubectl` via a [package manager](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-native-package-management) or [download](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-curl) it
+
+### Setting up `kind`
+
+1. If not installed, install kind as described [here](https://github.com/kubernetes-sigs/kind)
+
+2. Launch kind
+
+```bash
+$ tee cluster.yaml <<EOC
+kind: Cluster
+apiVersion: kind.sigs.k8s.io/v1alpha3
+nodes:
+- role: control-plane
+- role: worker
+- role: worker
+EOC
+
+$ kind create cluster --config cluster.yaml
+```
+
 
 ### Running on _OKD_ or `minishift`
 
