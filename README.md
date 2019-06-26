@@ -5,7 +5,7 @@
 This demo will guide you through setting up [KubeVirt](https://www.kubevirt.io) on
 
 - [minikube](#setting-up-minikube) 0.33+ with Kubernetes 1.12+
-- [kind](#setting-up-kind] 0.4+
+- [kind](#setting-up-kind) 0.4+
 - [minishift](#running-on-okd-or-minishift) with OKD 3.12+
 
 ## Quickstart
