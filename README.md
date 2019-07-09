@@ -4,7 +4,7 @@
 
 This demo will guide you through setting up [KubeVirt](https://www.kubevirt.io) on
 
-- [minikube](#setting-up-minikube) 0.33+ with Kubernetes 1.12+
+- [minikube](#setting-up-minikube) 1.2+
 - [kind](#setting-up-kind) 0.4+
 - [minishift](#running-on-okd-or-minishift) with OKD 3.12+
 
@@ -155,7 +155,7 @@ Now that KubeVirt is up an running, you can take a look at the [user guide](http
 3. Launch minikube with the desired memory
 
 ```bash
-$ minikube start --vm-driver kvm2 --feature-gates=DevicePlugins=true --memory 4096
+$ minikube start --vm-driver kvm2 --memory 4096
 ```
 
 3. Install `kubectl` via a [package manager](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-native-package-management) or [download](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-curl) it
