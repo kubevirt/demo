@@ -29,6 +29,22 @@ k_wait_all_running() { bash ci/wait-pods-ok; }
   # Some additional time to schedule the VM
   kubectl describe vmis testvm
   timeout_while 2m "kubectl get vmis testvm -o jsonpath='{.status.phase}' | grep Running"
+
+  if [[ "$(kubectl get -o name nodes) | wc -l)" -gt 1 ]];
+  then
+    kubectl create -f - <<<EOY
+apiVersion: kubevirt.io/v1alpha3
+kind: VirtualMachineInstanceMigration
+metadata:
+  name: testvm-migration
+spec:
+  vmiName: testvm
+EOY
+
+  sleep 20
+
+  kubectl describe VirtualMachineInstanceMigration testvm-migration
+  fi
 } || {
   echo "Something went wrong, gathering debug infos"
   kubectl get --all-namespaces events
