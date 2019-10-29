@@ -32,21 +32,13 @@ k_wait_all_running() { bash ci/wait-pods-ok; }
 
   if [[ "$(kubectl get -o name nodes) | wc -l)" -gt 1 ]];
   then
-    kubectl create -f - <<<EOY
-apiVersion: kubevirt.io/v1alpha3
-kind: VirtualMachineInstanceMigration
-metadata:
-  name: testvm-migration
-spec:
-  vmiName: testvm
-EOY
-
-  sleep 20
-
-  kubectl describe VirtualMachineInstanceMigration testvm-migration
+    virtctl migrate testvm
+    sleep 20
+    kubectl describe VirtualMachineInstanceMigration testvm-migration
   fi
 } || {
   echo "Something went wrong, gathering debug infos"
+  kubectl describe -n kubevirt kubevirt kubevirt
   kubectl get --all-namespaces events
   kubectl describe vmis
   exit 1
