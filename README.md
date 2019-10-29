@@ -70,7 +70,7 @@ The initial deployment can take a long time, because a number of pods have to be
 We'll watch the operator status to determine when the deployment is completed:
 
 ```bash
-$ kubectl wait --timeout=180s --for=condition=Ready -n kubevirt kv/kubevirt
+$ kubectl wait --timeout=180s --for=condition=Available -n kubevirt kv/kubevirt
 kubevirt.kubevirt.io/kubevirt condition met
 ```
 
