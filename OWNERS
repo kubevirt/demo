@@ -1,0 +1,14 @@
+filters:
+  ".*":
+    reviewers:
+      - codificat
+      - iranzo
+      - ptrnull
+      - alosadagrande
+      - fabiand
+    approvers:
+      - codificat
+      - iranzo
+      - ptrnull
+      - alosadagrande
+      - fabiand
