@@ -58,11 +58,12 @@ $ minikube ssh -- test -e /dev/kvm \
 Now you are finally ready to deploy KubeVirt using our operator (comparable to an installer):
 
 ```bash
-$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/v0.24.0/kubevirt-operator.yaml
+$ export KUBEVIRT_LAST_VERSION=$(curl -s https://api.github.com/repos/kubevirt/kubevirt/releases/latest | jq -r .tag_name)
+$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_LAST_VERSION}/kubevirt-operator.yaml
 …
 deployment.apps/virt-operator created
 
-$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/v0.24.0/kubevirt-cr.yaml
+$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_LAST_VERSION}/kubevirt-cr.yaml
 kubevirt.kubevirt.io/kubevirt created
 ```
 
@@ -82,7 +83,7 @@ An additional binary is provided to get quick access to the serial and graphical
 The tool is called `virtctl` and can be retrieved from the release page of KubeVirt:
 
 ```bash
-$ curl -L -o virtctl https://github.com/kubevirt/kubevirt/releases/download/v0.24.0/virtctl-v0.24.0-linux-amd64
+$ curl -L -o virtctl https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_LAST_VERSION}/virtctl-${KUBEVIRT_LAST_VERSION}-linux-amd64
 $ chmod +x virtctl
 ```
 
@@ -131,7 +132,7 @@ $ kubectl apply -f $YOUR_VM_SPEC
 $ ./virtctl console testvm
 
 # Connect to the graphical display
-# This requires remote-viewer from the virt-viewer package and a graphical desktop from where oyu run virtctl
+# This requires remote-viewer from the virt-viewer package and a graphical desktop from where you run virtctl
 $ ./virtctl vnc testvm
 ```
 
