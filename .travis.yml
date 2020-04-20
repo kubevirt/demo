@@ -30,6 +30,8 @@ before_script:
 ## FIXME Workaround for https://github.com/kubernetes/kubernetes/issues/61058
 ### And https://github.com/LiliC/travis-minikube/blob/e0f26f7b388057f51a0e2558afd5f990e07b6c49/.travis.yml#L11
 - sudo mount --make-rshared /
+### conntrack is required by kube 1.18
+- sudo apt-get install -y conntrack
 
 - bash -x ci/prepare-host $CPLATFORM $CVER
 - bash -x ci/start-cluster $CPLATFORM $CVER
