@@ -149,7 +149,7 @@ Now that KubeVirt is up an running, you can take a look at the [user guide](http
 
 2. If not installed, install minikube as described [here](https://github.com/kubernetes/minikube/):
 
-   1. Install the [kvm2 driver](https://github.com/kubernetes/minikube/blob/master/docs/drivers.md#kvm2-driver)
+   1. Install the [kvm2 driver](https://minikube.sigs.k8s.io/docs/drivers/kvm2/)
    2. Download the [`minikube` binary](https://github.com/kubernetes/minikube/releases)
 
 3. Launch minikube with the desired memory
