@@ -36,6 +36,9 @@ k_wait_all_running() { bash ci/wait-pods-ok; }
     sleep 20
     kubectl describe VirtualMachineInstanceMigration testvm-migration
   fi
+
+  kubectl delete -n kubevirt kubevirt kubevirt --wait=true
+  kubectl delete namespace kubevirt --wait=true
 } || {
   echo "Something went wrong, gathering debug infos"
   kubectl describe -n kubevirt kubevirt kubevirt
