@@ -14,6 +14,9 @@ jobs:
     - name: "kind (latest k8s)"
       env: CPLATFORM=kind
 
+    - name: "k3s (latest k8s)"
+      env: CPLATFORM=k3s
+
     - name: "oc cluster (latest okd)"
       env: CPLATFORM=oc_cluster
 
