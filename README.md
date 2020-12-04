@@ -6,7 +6,7 @@ This demo will guide you through setting up [KubeVirt](https://www.kubevirt.io) 
 
 - [minikube](#setting-up-minikube) 1.2+
 - [kind](#setting-up-kind) 0.4+
-- [minishift](#running-on-okd-or-minishift) with OKD 3.12+
+- CRC 1.18+
 
 ## Quickstart
 
@@ -180,18 +180,11 @@ $ kind create cluster --config cluster.yaml
 ```
 
 
-### Running on _OKD_ or `minishift`
+### Running on CRC
 
-OKD is just another Kubernetes distribution, and you can also use `kubectl` to interact with such a cluster.
+CRC is just another Kubernetes distribution, and you can also use `kubectl` to interact with such a cluster.
 However, the `oc` tool is part of OKD and provides additional commands for managing your cluster.
 
-1. Get the `oc` tool
+1. Get the `crc` tool
 
-  1. Download the _openshift-client-tools_ tarball from [here](https://github.com/openshift/origin/releases):
-  2. Extract the `oc` tool from the API tool `tar xf openshift-origin-client-tools*.tar.gz`
-
-2. Launch `oc cluster`:
-
-```bash
-oc cluster up --skip-registry-check --enable=router,sample-templates
-```
+  1. Follow the steps at https://github.com/code-ready/crc/releases to get and install CRC
