@@ -1,14 +1,13 @@
 filters:
   ".*":
     reviewers:
-      - codificat
-      - iranzo
-      - ptrnull
-      - alosadagrande
+      - mazzystr
       - fabiand
     approvers:
-      - codificat
-      - iranzo
-      - ptrnull
-      - alosadagrande
+      - mazzystr
       - fabiand
+    emeritus_approvers:
+      - codificat # 25 Feb 2021
+      - iranzo # 1 Apr 2020
+      - ptrnull # 1 Apr 2020
+      - alosadagrande # 1 Apr 2020
